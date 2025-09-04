@@ -1,6 +1,11 @@
 #ifndef ACTIONS_H_INCLUDED
 #define ACTIONS_H_INCLUDED
 
+#define DEBUG_PRINTF(fmt, ...) \
+    do { if (debug) fprintf(stderr, fmt, ##__VA_ARGS__); } while (0)
+
+int debug = 0;
+
 void rotate_x(int state[]) //ok
 {
     int aux = state[1];
@@ -133,92 +138,113 @@ void shuffle(int cube[], int max)
     //system("pause");
 };
 
-int dfs(Pilha* p, int state[], int ideal_state[], int *moves)
+int dfs(Pilha* p, No* original_state, int ideal_state[], int *moves) //mudar para original_state//
 {
-    //No* info;
-    push(p, state);
-
+    DEBUG_PRINTF("[Debug] entrou na func\n");
+    print_open(original_state->pattern); //mudar para original_state//
+    push(p, original_state); //mudar para original_state//
+    print_open(p->Topo->pattern);
+    No* state = malloc(sizeof(No));//
     while (!vaziaPilha(p))
     {
-        //printf("%c", p->Topo->status);
-        pop(p, state);
-        if (memcmp(state, ideal_state, 24 * sizeof(int)) == 0)
+        //for(int i=0; i<100; i++)
+        //{
+        DEBUG_PRINTF("[Debug] while iteration\n");
+        //printf("%d\n", i);
+        memcpy(state, top(p), sizeof(No));// talvez eu esteja alocando muito, so preciso atualizar o ->prox acho //
+        //state = top(p);//
+        DEBUG_PRINTF("[Debug] moves ate aqui: %d\n", *moves);
+        if (memcmp(state->pattern, ideal_state, 24 * sizeof(int)) == 0)
         {
-            printf("sucesso");
-            //printResultado(p);
+            DEBUG_PRINTF("[Debug] sucesso\n");
+            print_open(state->pattern);
+            imprimePilha(p);
+            printf("\n\n");
+            free(state);
             return 1;
         }
-
-        if ((*moves) <= 14)
+        if ((*moves) <= 14) //se der pau, <=
         {
-            //printf("%d", p->Topo->cx); //debug
-            //system("pause"); //debug
-            if (p->Topo->status == 'X')
+            DEBUG_PRINTF("[Debug] moves next: %d\n", *moves + 1);
+            DEBUG_PRINTF("[Debug] status:%c\n", state->status);
+            if (state->prox != NULL)
+                DEBUG_PRINTF("[Debug] parent status: %c\n", state->prox->status);
+            DEBUG_PRINTF("[Debug] cx, cy e cz: x%d y%d z%d\n", state->cx, state->cy, state->cz);
+
+            switch (state->status)
             {
-                //printf("debug");
-                p->Topo->status = 'Y';
-                push(p, state);
-                if (p->Topo->cx < 3)
+            case 'X':
+                if (state->cx < 3)
                 {
-                rotate_x(state);
-                p->Topo->rotation = 'x';
-                p->Topo->status = 'X';
-                p->Topo->cx++;
-                p->Topo->cy = 0;
-                p->Topo->cz = 0;
+                rotate_x(state->pattern);          //funcao sucessora begin
+                state->cx = p->Topo->cx + 1;
+                state->cy = 0;
+                state->cz = 0;
                 push(p, state); //arrumar push
-                (*moves)++;
-                //printf("x\n");
+                updateParent(p->Topo->prox, top(p));
+                (*moves)++;                       //funcao sucessora end
+                DEBUG_PRINTF("[Debug] rotacao X\n");
+                //printf("[Debug] rotacao x\n");
+                break;
                 }
-            }
-            else if (p->Topo->status == 'Y')
-            {
-                p->Topo->status = 'Z';
-                push(p, state);
-                if (p->Topo->cy < 3)
+            state->status = 'Y'; //rotation, nao status
+            DEBUG_PRINTF("[Debug] alterado para Y\n");
+            /* fallthrough */
+            case 'Y':
+                if (state->cy < 3)
                 {
-                rotate_y(state);
-                p->Topo->rotation = 'y';
-                p->Topo->status = 'X';
-                p->Topo->cy++;
-                p->Topo->cx = 0;
-                p->Topo->cz = 0;
+                rotate_y(state->pattern);       //funcao sucessora begin
+                state->cx = 0;
+                state->cy = p->Topo->cy + 1;
+                state->cz = 0;
                 push(p, state);
-                (*moves)++;
-                //printf("y\n");
+                updateParent(p->Topo->prox, top(p));
+                (*moves)++;                     //funcao sucessora end
+                DEBUG_PRINTF("[Debug] rotacao y\n");
+                //printf("[Debug] rotacao y\n");
+                break;
                 }
-            }
-            else if (p->Topo->status == 'Z')
-            {
-                p->Topo->status = 'C';
-                push(p, state);
+            state->status = 'Z';
+            DEBUG_PRINTF("[Debug] alterado para z\n");
+            /* fallthrough */
+            case 'Z':
                 if (p->Topo->cz < 3)
                 {
-                rotate_z(state);
-                p->Topo->rotation = 'z';
-                p->Topo->status = 'X';
-                p->Topo->cz++;
-                p->Topo->cx = 0;
-                p->Topo->cy = 0;
+                rotate_z(state->pattern);                //funcao sucessora begin
+                state->cx = 0;
+                state->cy = 0;
+                state->cz = p->Topo->cz + 1;
                 push(p, state);
-                (*moves)++;
-                //printf("z\n");
+                updateParent(p->Topo->prox, top(p));
+                (*moves)++;                    //funcao sucessora end
+                DEBUG_PRINTF("[Debug]rotacao z\n");
+                //printf("[Debug] rotacao z\n");
+                break;
                 }
-            }
-            else
-            {
-                //pop(p, state);
+            state->status = 'C';
+            DEBUG_PRINTF("[Debug] alterado para c\n");
+            /* fallthrough */
+            default:
+                DEBUG_PRINTF("[Debug]nenhuma rotacao disponivel, retirando da pilha...\n");
+                pop(p); //ARRUMAR SE NECESSARIO
                 (*moves)--;
+                break;
             }
-            //pop(p, state);
-            //system("pause");
-        }// é possivel fazer sem recursão!
+        }
         else
         {
-            //pop(p, state);
+            DEBUG_PRINTF("[Debug] limite alcancado, removendo da pilha\n");
+            //updateParent(p);
+            pop(p);
             (*moves)--;
         }
+        //print_open(p->Topo->pattern);
+        if (debug)
+            getchar();
+        //}
+    //getchar();
     }
+    free(state);
     return 0;
 }
 

@@ -306,7 +306,10 @@ int dfs(Pilha *p, No* state, int ideal_pattern[])
 
     while (!vaziaPilha(p))
     {
+        //for(int i=0; i<100; i++)
+        //{
         state = pop(p);
+        //printf("rotacao %c\n", state->rotation);
 
         //printf("%d %d %d %d %c", state->cx, state->cy, state->cz, state->pattern[0], state->rotation);
         push(pFinal, state);
@@ -344,6 +347,8 @@ int dfs(Pilha *p, No* state, int ideal_pattern[])
 //            No* discard = pop(pFinal);
 //            // Opcional: Libere a memória de discard se necessário
 //        }
+        //}
+        //getchar();
     }
     return 0;
 }

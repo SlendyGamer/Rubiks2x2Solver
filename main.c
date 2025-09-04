@@ -5,7 +5,7 @@
 #include "pilhas.h"
 #include "actions.h"
 
-#define SEED 1114
+#define SEED 1344
 #define GODSNUMBER 14
 #define FACES 24
 int main()
@@ -27,6 +27,11 @@ int main()
         print_open(correct_state);
         Pilha *p_states = CriaPilha();
         shuffle(current_state, 20); //usar 6 pada debug
+        //rotate_y(current_state);
+        //rotate_y(current_state);
+        //rotate_y(current_state);
+        //rotate_z(current_state);
+        //rotate_y(current_state);
         printf("\n\n");
         print_open(current_state->pattern);
         //push(p_states, current_state);
@@ -37,6 +42,8 @@ int main()
         {
                 printf("sucesso!");
         }
+        //Y Y Z Y X Z Y Y X Y X Z Y X -
+        //
         //if (DFS(p_states, current_state, correct_state, &moves)) //arumar funcao para evitar rodar mais de 4 vezes na mesma direcao
         //{
         //        printf("sucesso com %d moves", moves);

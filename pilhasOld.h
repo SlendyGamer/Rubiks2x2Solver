@@ -20,6 +20,7 @@ void imprime (Pilha* p)     IMPRIMA A PILHA
 int vaziaPilha(Pilha *p)	    VERIFICA SE A PILHA EST� VAZIA, RETORNA 1
 
 */
+void print_open(int cube[]);
 
 typedef struct no
 {
@@ -55,37 +56,55 @@ No* ret_ini (No* l)
 
 
 
-No* ins_ini (No* t, int state[])
+No* ins_ini (No* t, No* state)
 {
 No* aux = (No*) malloc(sizeof(No));
-memcpy(aux, state, sizeof(No));
 if (t == NULL)
 {
     aux->cx = 0;
     aux->cy = 0;
     aux->cz = 0;
     aux->rotation = '-';
-    aux->status = 'X';
-
+    memcpy(aux->pattern, state->pattern, 24 * sizeof(int));
+    
 }
 else
 {
-    aux->cx = t->cx;
-    aux->cy = t->cy;
-    aux->cz = t->cz;
-    aux->status = t->status;
-    aux->rotation = t->rotation;
+    memcpy(aux, state, sizeof(No));
+    //printf("[Debug] status do topo: %c\n", t->status);
+    aux->rotation = aux->status;
+    //printf("[Debug] status do topo apos: %c\n", aux->rotation);
 }
+aux->status = 'X';
 aux->prox = t;
 return aux;
 };
                 
-void push(Pilha* p, int state[])
+void push(Pilha* p, No* state)
 {
     p->Topo = ins_ini(p->Topo, state);
 }
 
-void pop(Pilha* p, int s[])
+void updateParent(No* pai, No* filho)
+{
+    switch (filho->rotation)
+    {
+        case 'X':
+        pai->status = 'Y';
+            break;
+        case 'Y':
+        pai->status = 'Z';
+            break;
+        case 'Z':
+        pai->status = 'C';
+            break;
+        default:
+            perror("updateparent error");
+            break;
+    }
+}
+
+No* pop (Pilha* p)
 {
     if (p->Topo==NULL)
     {
@@ -93,8 +112,21 @@ void pop(Pilha* p, int s[])
         exit(1); /* aborta programa */
     }
 
-    memcpy(s, p->Topo->pattern, 24 * sizeof(int));
+    No* dest = malloc(sizeof(No));
+    memcpy(dest, p->Topo, sizeof(No));
     p->Topo = ret_ini(p->Topo);
+    return dest;
+};
+
+No* top(Pilha* p)
+{
+    if (p->Topo==NULL)
+    {
+        printf("Pilha vazia!!\n");
+        exit(1); /* aborta programa */
+    }
+    
+    return p->Topo;
 };
 
 Pilha * libera (Pilha* p)
@@ -110,6 +142,14 @@ Pilha * libera (Pilha* p)
     return(NULL);
 };
 
+int vaziaPilha(Pilha *p)
+{
+    if (p->Topo==NULL)
+    {
+        return 1; //pilha vazia
+    }
+    return 0;
+}
 
 void imprimePilha(Pilha *p)
 {
@@ -120,24 +160,22 @@ void imprimePilha(Pilha *p)
     }
     else
     {
-        printf("\n\n\tImpress�o da Pilha: ");
+        printf("\n\n\tImpress�o da Pilha: \n");
         for (q=p->Topo; q!=NULL; q=q->prox)
         {
-            printf(" %c",q->rotation);
+            printf("cx: %d\n",q->cx);
+            printf("cy: %d\n",q->cy);
+            printf("cz: %d\n",q->cz);
+            printf("status: %c\n",q->status);
+            printf("rotation: %c\n",q->rotation);
+            print_open(q->pattern);
+            printf("\n\n\n");
         }
         printf("\n\n");
     }
 
 };
 
-int vaziaPilha(Pilha *p)
-{
-    if (p->Topo==NULL)
-    {
-        return 1; //pilha vazia
-    }
-    return 0;
-}
 
 
 
