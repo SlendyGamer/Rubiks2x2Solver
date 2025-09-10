@@ -4,6 +4,7 @@
 //#include "arvores.h"
 #include "pilhas.h"
 #include "actions.h"
+#include "bfs.h"
 
 #define SEED 1344
 #define GODSNUMBER 14
@@ -34,6 +35,14 @@ int main()
         //rotate_y(current_state);
         printf("\n\n");
         print_open(current_state->pattern);
+
+        if(bfs(current_state,correct_state))
+                printf("sucesso\n");
+        else 
+                printf("sem solução\n");
+
+        return 0;
+
         //push(p_states, current_state);
         //print_open(current_state.pattern);
         //push(p_states, current_state);
