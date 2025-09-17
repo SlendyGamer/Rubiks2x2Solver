@@ -2,16 +2,21 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include "no.h"
+#include "FILA.h"
 #include "pilhas.h"
 #include "actions.h"
-#include <stdlib.h>
-#include <string.h>
 
 void drawCubeNoRotation(void);
+void animateRotation(int value);
 // Estrutura para representar o estado do cubo
 //typedef struct {
 //    int pattern[24]; // Array de 0 a 23 mapeando quads para cores
 //} No; // Não utilizada diretamente
+
+Pilha* path = NULL;
 
 float colors[24][3] = {
     {1.0f, 0.0f, 0.0f},  // 0: red
@@ -467,6 +472,19 @@ void rotate_NOTz(void)
     quadValues[3] = aux;
 }
 
+void animateNextMove(int value) {
+    if (path != NULL && !vaziaPilha(path)) {
+        // Pega o próximo movimento
+        currentAxis = path->Topo->rotation;
+        rotationAngle = 0.0f; // inicia animação
+        // Remove da pilha
+        No* used = pop(path);
+        free(used);
+        // Chama o timer para a rotação de 5 graus por frame
+        glutTimerFunc(20, animateRotation, 0);
+    }
+}
+
 void animateRotation(int value) {
     rotationAngle += 5.0f; // Incrementa 5 graus por frame
     if (rotationAngle >= 90.0f) {
@@ -479,6 +497,11 @@ void animateRotation(int value) {
         else if (currentAxis == 'Z') rotate_NOTz();
         rotationAngle = 0.0f; // Resetar animação
         currentAxis = 0;      // Resetar eixo
+
+        if (path != NULL && !vaziaPilha(path)) {
+            glutTimerFunc(20, animateNextMove, 0);
+        }
+        
     } else {
         // Continuar animação
         glutTimerFunc(20, animateRotation, 0);
@@ -489,43 +512,67 @@ void animateRotation(int value) {
 void keyboard(unsigned char key, int x, int y) {
     if (rotationAngle == 0.0f) { // Só permitir nova rotação se a anterior terminou
         if (key == 'x' ) {
+            if (path) { libera(path); path = NULL; }
             currentAxis = 'x';
             rotationAngle = 0.0f;
             glutTimerFunc(20, animateRotation, 0);
         } else if (key == 'X') {
+            if (path) { libera(path); path = NULL; }
             currentAxis = 'X';
             rotationAngle = 0.0f;
             glutTimerFunc(20, animateRotation, 0);
         } 
         
         else if (key == 'y') {
+            if (path) { libera(path); path = NULL; }
         currentAxis = 'y';
         rotationAngle = 0.0f;
             glutTimerFunc(20, animateRotation, 0);
         } else if (key == 'Y') {
+            if (path) { libera(path); path = NULL; }
             currentAxis = 'Y';
             rotationAngle = 0.0f;
             glutTimerFunc(20, animateRotation, 0);
-        } 
-        
-        else if (key == 'z') {
-        currentAxis = 'z';
-        rotationAngle = 0.0f;
-        glutTimerFunc(20, animateRotation, 0);
+        } else if (key == 'z') {
+            if (path) { libera(path); path = NULL; }
+            currentAxis = 'z';
+            rotationAngle = 0.0f;
+            glutTimerFunc(20, animateRotation, 0);
         } else if (key == 'Z') {
+            if (path) { libera(path); path = NULL; }
             currentAxis = 'Z';
             rotationAngle = 0.0f;
             glutTimerFunc(20, animateRotation, 0);
-        }
-        
-        else if (key == 'd' || key == 'D') {
+        } else if (key == 'd' || key == 'D') {
+            if (path) libera(path);
             No* state = (No*)malloc(sizeof(No));
             memcpy(state->pattern, quadValues, 24 * sizeof(int));
             Pilha* p = CriaPilha();
-            if (dfs(p, state, solution))
+            path = CriaPilha();
+            if (dfs(p, state, solution, path))
             {
                 printf("sucesso\n");
             }
+            libera(p);
+        } else if (key == 'b' || key == 'B') {
+            if (path) libera(path);
+            No* state = (No*)malloc(sizeof(No));
+            memcpy(state->pattern, quadValues, 24 * sizeof(int));
+            Fila* f = CriaFila();
+            path = CriaPilha();
+            if (bfs(f, state, solution, path))
+            {
+                printf("sucesso\n");
+            }
+            liberaFila(f);
+        } else if(key == 's' || key == 'S') {
+            if(path != NULL && !vaziaPilha(path) && rotationAngle == 0.0f)
+            {
+                currentAxis = path->Topo->rotation;
+                rotationAngle = 0.0f;
+                glutTimerFunc(20, animateNextMove, 0);
+            }
+            //libera(path);
         }
     }
 }
@@ -568,7 +615,7 @@ int main(int argc, char** argv) {
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(800, 600);
     glutInitWindowPosition(100, 100);
-    glutCreateWindow("Cubo Simples com OpenGL");
+    glutCreateWindow("Algoritmos: Rubiks Cube 2x2");
     init();
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);

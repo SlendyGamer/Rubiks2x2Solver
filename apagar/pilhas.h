@@ -22,22 +22,6 @@ int vaziaPilha(Pilha *p)	    VERIFICA SE A PILHA EST� VAZIA, RETORNA 1
 */
 void print_open(int cube[]);
 
-typedef struct no
-{
-    int pattern[24];
-    int cx;
-    int cNx;
-    int cy;
-    int cNy;
-    int cz;
-    int cNz;
-    int moves;
-    char rotation;
-    char status; //old
-    struct no *pai;
-    struct no *prox;
-}No;
-
 typedef struct pilha
 {
    No *Topo;
@@ -134,7 +118,7 @@ void imprimePilha(Pilha *p)
         }
         printf("\n\n");
     }*/
-    int i = -1;
+    int i = 0;
 while(q != NULL){
         i++;
             //printf("cx: %d\n",q->cx);
@@ -144,29 +128,36 @@ while(q != NULL){
             printf("rotation: %c\n",q->rotation);
             //print_open(q->pattern);
             //printf("\n\n\n");
-    q = q->pai;
+    q = q->prox;
 }
 printf("completed REALLY %d moves\n", i);
 };
 
-                    void imprimePilhaOld(Pilha *p)
-                    {
-                        No* q;
-                        if(!p)
-                        {
-                            printf("\n\n\tPILHA VAZIA!!!!\n\n");
-                        }
-                        else
-                        {
-                            printf("\n\n\tImpress�o da Pilha: ");
-                            for (q=p->Topo; q!=NULL; q=q->prox)
-                            {
-                                printf(" %c",q->rotation);
-                            }
-                            printf("\n\n");
-                        }
+void preparePathFila(Fila* f, Pilha* path)
+{
+    No* aux;
+    for (aux=f->fim; aux != NULL && aux->rotation != '-'; aux=aux->pai)
+    {
+        No* copia = malloc(sizeof(No));;
+        memcpy(copia, aux, sizeof(No));
+        //copia->prox = NULL;
+        push(path, copia);
+    }
+}
 
-                    };
+void preparePathPilha(Pilha* p, Pilha* path)
+{
+    No* aux;
+    for (aux=p->Topo; aux != NULL && aux->rotation != '-'; aux=aux->pai)
+    {
+        No* copia = malloc(sizeof(No));;
+        memcpy(copia, aux, sizeof(No));
+        //copia->prox = NULL;
+        push(path, copia);
+    }
+}
+
+                    
 
 int vaziaPilha(Pilha *p)
 {

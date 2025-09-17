@@ -15,21 +15,7 @@ Fila* liberaFila (Fila* f) LIBERA A FILA
 
 void imprimeFila (Fila* f)IMPRIME A FILA
 */
-typedef struct no
-{
-    int pattern[24];
-    int cx;
-    int cNx;
-    int cy;
-    int cNy;
-    int cz;
-    int cNz;
-    int moves;
-    char rotation;
-    char status; //old
-    struct no *pai;
-    struct no *prox;
-}No;
+
 
 typedef struct fila
 {
@@ -52,18 +38,17 @@ Fila* CriaFila ()
     return f;
 }
 
-No* ins_fim (No *fim)
+No* ins_fim (No *fim, No* state)
 {
-    No *p = (No*)malloc(sizeof(No));
-    p->prox = NULL;
+    state->prox = NULL;
     if (fim != NULL) /* verifica se lista n�o estava vazia */
-    fim->prox = p;
-    return p;
+    fim->prox = state;
+    return state;
 }
 
-void InsereFila (Fila* f, int v)
+void InsereFila (Fila* f, No* state)
 {
-    f->fim = ins_fim(f->fim,v);
+    f->fim = ins_fim(f->fim, state);
     if (f->ini==NULL) /* fila antes vazia? */
     f->ini = f->fim;
 }
@@ -75,7 +60,7 @@ No* retira_ini (No* ini)
     return p;
 }
 
-int RetiraFila (Fila* f)
+No* RetiraFila (Fila* f)
 {
     if (VaziaFila(f))
     {
@@ -83,7 +68,7 @@ int RetiraFila (Fila* f)
         exit(0); /* aborta programa */
     }
     No* dest = malloc(sizeof(No));
-    memcpy(dest, p->Topo, sizeof(No));
+    memcpy(dest, f->ini, sizeof(No));
     f->ini = retira_ini(f->ini);
     if (f->ini == NULL) /* fila ficou vazia? */
     f->fim = NULL;
