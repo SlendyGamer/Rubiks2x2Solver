@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//#include "arvores.h"
+#include "no.h"
 #include "pilhas.h"
+#include "FILA.h"
 #include "actions.h"
 
 #define SEED 1344
@@ -25,12 +26,12 @@ int main()
         memcpy(current_state->pattern, correct_state, 24 * sizeof(int));
         //int moves = 0;
         print_open(correct_state);
-        Pilha *p_states = CriaPilha();
-        //rotate_y(current_state);
+        Fila *f_states = CriaFila();
+        rotate_y(current_state);
         rotate_x(current_state);
         rotate_y(current_state);
         rotate_z(current_state);
-        /*rotate_y(current_state);
+        rotate_y(current_state);
         rotate_z(current_state);
         rotate_x(current_state);
         rotate_y(current_state);
@@ -42,7 +43,7 @@ int main()
         rotate_x(current_state);
         rotate_y(current_state);
         rotate_x(current_state);
-        rotate_y(current_state);*/
+        rotate_y(current_state);
         //shuffle(current_state, 20); //usar 6 pada debug
         //rotate_y(current_state);
         //rotate_y(current_state);
@@ -55,10 +56,13 @@ int main()
         //print_open(current_state.pattern);
         //push(p_states, current_state);
         //if (dfs_old(p_states, current_state, correct_state, &moves))
-        if (dfs(p_states, current_state, correct_state) == 1)
+        //if (dfs(p_states, current_state, correct_state) == 1)
+        if (bfs(f_states, current_state, correct_state) == 1)
         {
                 printf("sucesso!");
         }
+        else    
+                printf("fail!");
         //Y Y Z Y X Z Y Y X Y X Z Y X -
         //
         //if (DFS(p_states, current_state, correct_state, &moves)) //arumar funcao para evitar rodar mais de 4 vezes na mesma direcao
@@ -68,11 +72,11 @@ int main()
                 //imprimePilha(p_states);
                 //imprimePilhaOld(p_states);
                 printf("\n\n");
-                print_open(current_state->pattern);
+                //print_open(current_state->pattern);
         //        return 0;
         //}
         //printf("falha");
-        libera(p_states);
+        liberaFila(f_states);
         return 1;
 
 }

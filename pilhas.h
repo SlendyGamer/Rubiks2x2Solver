@@ -20,23 +20,13 @@ void imprime (Pilha* p)     IMPRIMA A PILHA
 int vaziaPilha(Pilha *p)	    VERIFICA SE A PILHA EST� VAZIA, RETORNA 1
 
 */
+
+
+
 void print_open(int cube[]);
 
-typedef struct no
-{
-    int pattern[24];
-    int cx;
-    int cNx;
-    int cy;
-    int cNy;
-    int cz;
-    int cNz;
-    int moves;
-    char rotation;
-    char status; //old
-    struct no *pai;
-    struct no *prox;
-}No;
+#include "no.h"
+
 
 typedef struct pilha
 {

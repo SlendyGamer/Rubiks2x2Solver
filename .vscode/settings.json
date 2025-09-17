@@ -5,7 +5,8 @@
         "pilhas.h": "c",
         "actions.h": "c",
         "string.h": "c",
-        "actionsold.h": "c"
+        "actionsold.h": "c",
+        "no.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

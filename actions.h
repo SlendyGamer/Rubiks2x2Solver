@@ -308,7 +308,7 @@ int dfs(Pilha *p, No* state, int solution[])
 {
     Pilha* pFinal = CriaPilha();
     state->pai = NULL;
-    state->cx = 0;
+    state->cx = 0; //definir cNx, cNy e cNz tambem
     state->cy = 0;
     state->cz = 0;
     state->moves = 0;
@@ -353,69 +353,145 @@ int dfs(Pilha *p, No* state, int solution[])
     return 0;
 }
 
-/*int DFS(Pilha* p, int state[], int ideal_state[], int *moves)
+void sucessoraBFS(Fila *f, No* state, char dir)
 {
-    //Pilha *py = CriaPilha();
-    //Pilha *pz = CriaPilha();
-    if (memcmp(state, ideal_state, 24 * sizeof(int)) == 0)
+    No* auxNo = malloc(sizeof(No));
+    memcpy(auxNo, state, sizeof(No));
+    switch(dir)
     {
-        printResultado(p);
-        //printf("sucesso");
-        return 1;
+        case 'x':
+            auxNo->cx++;
+            auxNo->cNx = 0;
+            auxNo->cy = 0;
+            auxNo->cNy = 0;
+            auxNo->cz = 0;
+            auxNo->cNz = 0;
+            auxNo->rotation = 'x';
+            auxNo->pai = state;
+            auxNo->moves = state->moves + 1;
+            auxNo = rotate_x(auxNo);
+            InsereFila(f, auxNo);
+            break;
+        case 'X': //X'
+            auxNo->cx = 0;
+            auxNo->cNx++;
+            auxNo->cy = 0;
+            auxNo->cNy = 0;
+            auxNo->cz = 0;
+            auxNo->cNz = 0;
+            auxNo->rotation = 'X';
+            auxNo->pai = state;
+            auxNo->moves = state->moves + 1;
+            auxNo = rotate_NOTx(auxNo);
+            InsereFila(f, auxNo);
+            break;
+        case 'y':
+            auxNo->cx = 0;
+            auxNo->cNx = 0;
+            auxNo->cy++;
+            auxNo->cNy = 0;
+            auxNo->cz = 0;
+            auxNo->cNz = 0;
+            auxNo->rotation = 'y';
+            auxNo->pai = state;
+            auxNo->moves = state->moves + 1;
+            auxNo = rotate_y(auxNo);
+            InsereFila(f, auxNo);
+            break;
+        case 'Y': //Y'
+            auxNo->cx = 0;
+            auxNo->cNx = 0;
+            auxNo->cy = 0;
+            auxNo->cNy++;
+            auxNo->cz = 0;
+            auxNo->cNz = 0;
+            auxNo->rotation = 'Y';
+            auxNo->pai = state;
+            auxNo->moves = state->moves + 1;
+            auxNo = rotate_NOTy(auxNo);
+            InsereFila(f, auxNo);
+            break;
+        case 'z':
+            auxNo->cx = 0;
+            auxNo->cNx = 0;
+            auxNo->cy = 0;
+            auxNo->cNy = 0;
+            auxNo->cz++;
+            auxNo->cNz = 0;
+            auxNo->rotation = 'z';
+            auxNo->pai = state;
+            auxNo->moves = state->moves + 1;
+            auxNo = rotate_z(auxNo);
+            InsereFila(f, auxNo);
+            break;
+        case 'Z': //Z'
+            auxNo->cx = 0;
+            auxNo->cNx = 0;
+            auxNo->cy = 0;
+            auxNo->cNy = 0;
+            auxNo->cz = 0;
+            auxNo->cNz++;
+            auxNo->rotation = 'Z';
+            auxNo->pai = state;
+            auxNo->moves = state->moves + 1;
+            auxNo = rotate_NOTz(auxNo);
+            InsereFila(f, auxNo);
+            break;
+        default:
+            perror("variavel dir deve ser 'x/X', 'y/Y' ou 'z/Z'");
+            exit(2);
     }
+}
 
-    if ((*moves) >= 14)
-        return 0;
+int bfs(Fila *f, No* state, int solution[])
+{
+    Fila* fFinal = CriaFila();
+    state->pai = NULL;
+    state->cx = 0;
+    state->cy = 0;
+    state->cz = 0;
+    state->moves = 0;
+    state->rotation = '-';
+    state->pai = NULL;
+    state->prox = NULL;
+    print_open(state->pattern);
+    InsereFila(f, state);
+    while(!VaziaFila(f))
+    {
+        state = RetiraFila(f);
+        //printf("rotation: %c\n",state->rotation);
+        InsereFila(fFinal, state);
 
-    //printf("%d", p->Topo->cx); //debug
-    //system("pause"); //debug
-    if (p->Topo->cx < 3)
-    {
-        push(p, state); //arrumar push
-        rotate_x(state);
-        p->Topo->cx++;
-        p->Topo->cy = 0;
-        p->Topo->cz = 0;
-        (*moves)++;
-        //printf("x\n");
-        if (DFS(p, state, ideal_state, moves)) //roda em x primeiro ate atingir altura max
-        return 1;
-        (*moves)--;
-        pop(p, state); //arrumar pop
+        if(memcmp(state->pattern, solution, 24 * sizeof(int)) == 0)
+        {
+           //printa moves
+           printf("sucesso com %d moves\n", state->moves);
+           print_open(state->pattern);
+           imprimeFila(fFinal);
+           return 1;
+        }
+
+        if (state->moves < 14)
+        {
+            if (state->cz < 2 && state->cNz == 0)
+                sucessoraBFS(f, state, 'z');
+            if (state->cNz < 1 && state->cz == 0)
+                sucessoraBFS(f, state, 'Z');
+
+            if (state->cy < 2 && state->cNy == 0)
+                sucessoraBFS(f, state, 'y');
+            if (state->cNy < 1 && state->cy == 0)
+                sucessoraBFS(f, state, 'Y');
+
+            if (state->cx < 2 && state->cNx == 0)
+                sucessoraBFS(f, state, 'x'); //soma cx em 1
+            if (state->cNx < 1 && state->cx == 0)
+                sucessoraBFS(f, state, 'X');
+        }
+        //nao preciso de moves--; em else aqui
     }
-    if (p->Topo->cy < 3)
-    {
-        push(p, state);
-        rotate_y(state);
-        p->Topo->cy++;
-        p->Topo->cx = 0;
-        p->Topo->cz = 0;
-        (*moves)++;
-        //printf("y\n");
-        if (DFS(p, state, ideal_state, moves)) //roda em y apos rodar em x
-            return 1;
-        (*moves)--;
-        pop(p, state);
-    }
-    if (p->Topo->cz < 3)
-    {
-        push(p, state);
-        rotate_z(state);
-        p->Topo->cz++;
-        p->Topo->cx = 0;
-        p->Topo->cy = 0;
-        (*moves)++;
-        //printf("z\n");
-        if (DFS(p, state, ideal_state, moves)) //roda em z apos rodar em x e y
-            return 1;
-        (*moves)--;
-        pop(p, state);
-    }
-    //pop(p, state);
-    //system("pause");
     return 0;
-}// é possivel fazer sem recursão!
-*/
+}
 
 
 
