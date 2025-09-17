@@ -5,8 +5,11 @@
 
 // Rotaciona e devolve o próprio ponteiro (estado é modificado in-place)
 No* rotate_x(No* state);
+No* rotate_NOTx(No* state);
 No* rotate_y(No* state);
+No* rotate_NOTy(No* state);
 No* rotate_z(No* state);
+No* rotate_NOTz(No* state);
 
 // Visualização do cubo (somente leitura)
 void print_open(int cube[]);

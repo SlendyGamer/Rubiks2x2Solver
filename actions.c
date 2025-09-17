@@ -31,6 +31,33 @@ No* rotate_x(No* state) //ok
     return state;
 }
 
+No* rotate_NOTx(No* state) //ok
+{
+    int aux = state->pattern[1];
+    state->pattern[1] = state->pattern[16];
+    state->pattern[16] = state->pattern[12];
+    state->pattern[12] = state->pattern[11];
+    state->pattern[11] = aux; //ok
+
+    aux = state->pattern[17];
+    state->pattern[17] = state->pattern[13];
+    state->pattern[13] = state->pattern[9];
+    state->pattern[9] = state->pattern[2];
+    state->pattern[2] = aux; //ok
+
+    aux = state->pattern[0];
+    state->pattern[0] = state->pattern[15];
+    state->pattern[15] = state->pattern[14];
+    state->pattern[14] = state->pattern[10];
+    state->pattern[10] = aux; //ok
+
+    //state->cx++;
+    //state->cy = 0;
+    //state->cz = 0;
+
+    return state;
+}
+
 No* rotate_y(No* state) //ok
 {
     int aux = state->pattern[0];
@@ -50,6 +77,33 @@ No* rotate_y(No* state) //ok
     state->pattern[3] = state->pattern[7];
     state->pattern[7] = state->pattern[11];
     state->pattern[11] = aux; //ok
+
+    //state->cx =0;
+    //state->cy++;
+    //state->cz = 0;
+
+    return state;
+}
+
+No* rotate_NOTy(No* state) //ok
+{
+    int aux = state->pattern[0];
+    state->pattern[0] = state->pattern[9];
+    state->pattern[9] = state->pattern[8];
+    state->pattern[8] = state->pattern[4];
+    state->pattern[4] = aux; //ok
+
+    aux = state->pattern[10];
+    state->pattern[10] = state->pattern[6];
+    state->pattern[6] = state->pattern[5];
+    state->pattern[5] = state->pattern[1];
+    state->pattern[1] = aux; //ok
+
+    aux = state->pattern[2];
+    state->pattern[2] = state->pattern[11];
+    state->pattern[11] = state->pattern[7];
+    state->pattern[7] = state->pattern[3];
+    state->pattern[3] = aux; //ok
 
     //state->cx =0;
     //state->cy++;
@@ -85,6 +139,32 @@ No* rotate_z(No* state) //ok
     return state;
 }
 
+No* rotate_NOTz(No* state) //ok
+{
+    int aux = state->pattern[2];
+    state->pattern[2] = state->pattern[5];
+    state->pattern[5] = state->pattern[19];
+    state->pattern[19] = state->pattern[15];
+    state->pattern[15] = aux; //ok
+
+    aux = state->pattern[3];
+    state->pattern[3] = state->pattern[20];
+    state->pattern[20] = state->pattern[16];
+    state->pattern[16] = state->pattern[0];
+    state->pattern[0] = aux; //ok
+
+    aux = state->pattern[4];
+    state->pattern[4] = state->pattern[18];
+    state->pattern[18] = state->pattern[17];
+    state->pattern[17] = state->pattern[1];
+    state->pattern[1] = aux; //ok
+
+    //state->cx = 0;
+    //state->cy = 0;
+    //state->cz++;
+
+    return state;
+}
 
 
 void print_open(int cube[])

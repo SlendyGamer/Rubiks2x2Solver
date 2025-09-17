@@ -37,7 +37,7 @@ int main()
         print_open(current_state->pattern);
 
         if(bfs(current_state,correct_state))
-                printf("sucesso\n");
+                printf("sucesso bfs\n");
         else 
                 printf("sem solução\n");
 
