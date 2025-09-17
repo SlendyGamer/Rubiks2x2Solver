@@ -20,13 +20,17 @@ void imprime (Pilha* p)     IMPRIMA A PILHA
 int vaziaPilha(Pilha *p)	    VERIFICA SE A PILHA EST� VAZIA, RETORNA 1
 
 */
+void print_open(int cube[]);
 
 typedef struct no
 {
     int pattern[24];
     int cx;
+    int cNx;
     int cy;
+    int cNy;
     int cz;
+    int cNz;
     int moves;
     char rotation;
     char status; //old
@@ -47,36 +51,24 @@ Pilha* CriaPilha (void)
    return p;
 };
 
-No* ins_ini (No* t, No* state)
+No* ins_ini(No* topo, No* state)
 {
-    No* aux = (No*) malloc(sizeof(No));
-    memcpy(aux, state, sizeof(No));
-    if (t == NULL)
+    if (topo == NULL)
     {
-        aux->cx = 0;
-        aux->cy = 0;
-        aux->cz = 0;
-        aux->moves = 0;
-        aux->pai = NULL;
-        aux->rotation = '-';
+        state->prox = NULL;
     }
     else
     {
-        aux->cx = state->cx;
-        aux->cy = state->cy;
-        aux->cz = state->cz;
-        aux->moves = state->moves + 1;
-        //aux->pai = state;
-        aux->rotation = state->rotation;
+        state->prox = topo;
     }
-    aux->prox = t;
-    return aux;
-};
+        return state;
+}
 
 void push (Pilha* p, No* state)
 {
     p->Topo = ins_ini(p->Topo, state);
 };
+
 
 No* ret_ini (No* l)
 {
@@ -97,6 +89,17 @@ No* pop (Pilha* p)
     memcpy(dest, p->Topo, sizeof(No));
     p->Topo = ret_ini(p->Topo);
     return dest;
+};
+
+No* top(Pilha* p)
+{
+    if (p->Topo==NULL)
+    {
+        printf("Pilha vazia!!\n");
+        exit(1); /* aborta programa */
+    }
+    
+    return p->Topo;
 };
 
 
@@ -131,11 +134,19 @@ void imprimePilha(Pilha *p)
         }
         printf("\n\n");
     }*/
-
+    int i = -1;
 while(q != NULL){
-    printf("%c ", q->rotation);
+        i++;
+            //printf("cx: %d\n",q->cx);
+            //printf("cy: %d\n",q->cy);
+            //printf("cz: %d\n",q->cz);
+            //printf("status: %c\n",q->status);
+            printf("rotation: %c\n",q->rotation);
+            //print_open(q->pattern);
+            //printf("\n\n\n");
     q = q->pai;
 }
+printf("completed REALLY %d moves\n", i);
 };
 
                     void imprimePilhaOld(Pilha *p)

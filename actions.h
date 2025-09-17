@@ -28,6 +28,33 @@ No* rotate_x(No* state) //ok
     return state;
 }
 
+No* rotate_NOTx(No* state) //ok
+{
+    int aux = state->pattern[1];
+    state->pattern[1] = state->pattern[16];
+    state->pattern[16] = state->pattern[12];
+    state->pattern[12] = state->pattern[11];
+    state->pattern[11] = aux; //ok
+
+    aux = state->pattern[17];
+    state->pattern[17] = state->pattern[13];
+    state->pattern[13] = state->pattern[9];
+    state->pattern[9] = state->pattern[2];
+    state->pattern[2] = aux; //ok
+
+    aux = state->pattern[0];
+    state->pattern[0] = state->pattern[15];
+    state->pattern[15] = state->pattern[14];
+    state->pattern[14] = state->pattern[10];
+    state->pattern[10] = aux; //ok
+
+    //state->cx++;
+    //state->cy = 0;
+    //state->cz = 0;
+
+    return state;
+}
+
 No* rotate_y(No* state) //ok
 {
     int aux = state->pattern[0];
@@ -47,6 +74,33 @@ No* rotate_y(No* state) //ok
     state->pattern[3] = state->pattern[7];
     state->pattern[7] = state->pattern[11];
     state->pattern[11] = aux; //ok
+
+    //state->cx =0;
+    //state->cy++;
+    //state->cz = 0;
+
+    return state;
+}
+
+No* rotate_NOTy(No* state) //ok
+{
+    int aux = state->pattern[0];
+    state->pattern[0] = state->pattern[9];
+    state->pattern[9] = state->pattern[8];
+    state->pattern[8] = state->pattern[4];
+    state->pattern[4] = aux; //ok
+
+    aux = state->pattern[10];
+    state->pattern[10] = state->pattern[6];
+    state->pattern[6] = state->pattern[5];
+    state->pattern[5] = state->pattern[1];
+    state->pattern[1] = aux; //ok
+
+    aux = state->pattern[2];
+    state->pattern[2] = state->pattern[11];
+    state->pattern[11] = state->pattern[7];
+    state->pattern[7] = state->pattern[3];
+    state->pattern[3] = aux; //ok
 
     //state->cx =0;
     //state->cy++;
@@ -82,85 +136,31 @@ No* rotate_z(No* state) //ok
     return state;
 }
 
-void rotate_xOld(int state[]) //ok
+No* rotate_NOTz(No* state) //ok
 {
-    int aux = state[1];
-    state[1] = state[11];
-    state[11] = state[12];
-    state[12] = state[16];
-    state[16] = aux; //ok
+    int aux = state->pattern[2];
+    state->pattern[2] = state->pattern[5];
+    state->pattern[5] = state->pattern[19];
+    state->pattern[19] = state->pattern[15];
+    state->pattern[15] = aux; //ok
 
-    aux = state[17];
-    state[17] = state[2];
-    state[2] = state[9];
-    state[9] = state[13];
-    state[13] = aux; //ok
+    aux = state->pattern[3];
+    state->pattern[3] = state->pattern[20];
+    state->pattern[20] = state->pattern[16];
+    state->pattern[16] = state->pattern[0];
+    state->pattern[0] = aux; //ok
 
-    aux = state[0];
-    state[0] = state[10];
-    state[10] = state[14];
-    state[14] = state[15];
-    state[15] = aux; //ok
-
-    //state->cx++;
-    //state->cy = 0;
-    //state->cz = 0;
-
-    //return state;
-}
-
-void rotate_yOld(int state[]) //ok
-{
-    int aux = state[0];
-    state[0] = state[4];
-    state[4] = state[8];
-    state[8] = state[9];
-    state[9] = aux; //ok
-
-    aux = state[10];
-    state[10] = state[1];
-    state[1] = state[5];
-    state[5] = state[6];
-    state[6] = aux; //ok
-
-    aux = state[2];
-    state[2] = state[3];
-    state[3] = state[7];
-    state[7] = state[11];
-    state[11] = aux; //ok
-
-    //state->cx =0;
-    //state->cy++;
-    //state->cz = 0;
-
-    //return state;
-}
-
-void rotate_zOld(int state[]) //ok
-{
-    int aux = state[2];
-    state[2] = state[15];
-    state[15] = state[19];
-    state[19] = state[5];
-    state[5] = aux; //ok
-
-    aux = state[3];
-    state[3] = state[0];
-    state[0] = state[16];
-    state[16] = state[20];
-    state[20] = aux; //ok
-
-    aux = state[4];
-    state[4] = state[1];
-    state[1] = state[17];
-    state[17] = state[18];
-    state[18] = aux; //ok
+    aux = state->pattern[4];
+    state->pattern[4] = state->pattern[18];
+    state->pattern[18] = state->pattern[17];
+    state->pattern[17] = state->pattern[1];
+    state->pattern[1] = aux; //ok
 
     //state->cx = 0;
     //state->cy = 0;
     //state->cz++;
 
-    //return state;
+    return state;
 }
 
 void print_open(int cube[])
@@ -214,54 +214,6 @@ void shuffle(No* cube, int max)
     //system("pause");
 }
 
-
-/*int DFS(Pilha* p, int state[], int ideal_state[], int moves)
-{
-    //checa se é final
-    //se for. end(returna caminho)
-    //else
-    //while (!vaziaPilha(p))
-    //{
-        if (moves < 14)
-        {
-            push(p, state); //modificar push
-            rotate_x(state);
-            DFS(p, state, ideal_state, moves); //roda em x primeiro ate atingir altura max
-
-            rotate_y(state);
-            DFS(p, state, ideal_state, moves); //roda em y
-
-            rotate_z(state);
-            DFS(p, state, ideal_state, moves); //roda em z
-        }
-        else
-        {
-            pop(p, state); //modificar pop
-            return 0; //nao tem nada aqui, volta para estado passado
-        }
-    //}
-}*/
-
-/*void printResultado(Pilha* p)
-{
-    Pilha *auxP = CriaPilha();
-    int auxV[24];
-    //No* auxNo = NULL;
-    while(!vaziaPilha(p))
-    {
-        push(auxP, auxV);
-        pop(p, NULL);
-
-    }
-
-    while (auxP != NULL)
-    {
-        pop(auxP, auxV);
-        printf("%c", auxP->Topo->rotation);
-    }
-}
-*/
-
 void sucessora(Pilha *p, No* state, char dir)
 {
     No* auxNo = malloc(sizeof(No));
@@ -270,85 +222,133 @@ void sucessora(Pilha *p, No* state, char dir)
     {
         case 'x':
             auxNo->cx++;
+            auxNo->cNx = 0;
             auxNo->cy = 0;
+            auxNo->cNy = 0;
             auxNo->cz = 0;
+            auxNo->cNz = 0;
             auxNo->rotation = 'x';
             auxNo->pai = state;
-            push(p, rotate_x(auxNo));
+            auxNo->moves = state->moves + 1;
+            auxNo = rotate_x(auxNo);
+            push(p, auxNo);
+            break;
+        case 'X': //X'
+            auxNo->cx = 0;
+            auxNo->cNx++;
+            auxNo->cy = 0;
+            auxNo->cNy = 0;
+            auxNo->cz = 0;
+            auxNo->cNz = 0;
+            auxNo->rotation = 'X';
+            auxNo->pai = state;
+            auxNo->moves = state->moves + 1;
+            auxNo = rotate_NOTx(auxNo);
+            push(p, auxNo);
             break;
         case 'y':
             auxNo->cx = 0;
+            auxNo->cNx = 0;
             auxNo->cy++;
+            auxNo->cNy = 0;
             auxNo->cz = 0;
+            auxNo->cNz = 0;
             auxNo->rotation = 'y';
             auxNo->pai = state;
-            push(p, rotate_y(auxNo));
+            auxNo->moves = state->moves + 1;
+            auxNo = rotate_y(auxNo);
+            push(p, auxNo);
+            break;
+        case 'Y': //Y'
+            auxNo->cx = 0;
+            auxNo->cNx = 0;
+            auxNo->cy = 0;
+            auxNo->cNy++;
+            auxNo->cz = 0;
+            auxNo->cNz = 0;
+            auxNo->rotation = 'Y';
+            auxNo->pai = state;
+            auxNo->moves = state->moves + 1;
+            auxNo = rotate_NOTy(auxNo);
+            push(p, auxNo);
             break;
         case 'z':
             auxNo->cx = 0;
+            auxNo->cNx = 0;
             auxNo->cy = 0;
+            auxNo->cNy = 0;
             auxNo->cz++;
+            auxNo->cNz = 0;
             auxNo->rotation = 'z';
             auxNo->pai = state;
-            push(p, rotate_z(auxNo));
+            auxNo->moves = state->moves + 1;
+            auxNo = rotate_z(auxNo);
+            push(p, auxNo);
+            break;
+        case 'Z': //Z'
+            auxNo->cx = 0;
+            auxNo->cNx = 0;
+            auxNo->cy = 0;
+            auxNo->cNy = 0;
+            auxNo->cz = 0;
+            auxNo->cNz++;
+            auxNo->rotation = 'Z';
+            auxNo->pai = state;
+            auxNo->moves = state->moves + 1;
+            auxNo = rotate_NOTz(auxNo);
+            push(p, auxNo);
             break;
         default:
-            perror("variavel dir deve ser 'x', 'y' ou 'z'");
+            perror("variavel dir deve ser 'x/X', 'y/Y' ou 'z/Z'");
             exit(2);
     }
 }
 
-int dfs(Pilha *p, No* state, int ideal_pattern[])
+int dfs(Pilha *p, No* state, int solution[])
 {
     Pilha* pFinal = CriaPilha();
+    state->pai = NULL;
+    state->cx = 0;
+    state->cy = 0;
+    state->cz = 0;
+    state->moves = 0;
+    state->rotation = '-';
+    state->pai = NULL;
+    state->prox = NULL;
+    print_open(state->pattern);
     push(p, state);
-                printf("%d %d %d %d %c\n", p->Topo->cx, p->Topo->cy, p->Topo->cz, p->Topo->pattern[0], p->Topo->rotation);
-
-    while (!vaziaPilha(p))
+    while(!vaziaPilha(p))
     {
-        //for(int i=0; i<100; i++)
-        //{
         state = pop(p);
-        //printf("rotacao %c\n", state->rotation);
-
-        //printf("%d %d %d %d %c", state->cx, state->cy, state->cz, state->pattern[0], state->rotation);
         push(pFinal, state);
-        //printf("%d %d %d %d %c", state->cx, state->cy, state->cz, state->pattern[0], state->rotation);
 
-        //system("pause");
-        if (memcmp(state->pattern, ideal_pattern, 24 * sizeof(int)) == 0)
+        if(memcmp(state->pattern, solution, 24 * sizeof(int)) == 0)
         {
-            printf("completed %d moves\n", state->moves);
-            //printf("%d %d %d %d %c\n", p->Topo->cx, p->Topo->cy, p->Topo->cz, p->Topo->pattern[0], p->Topo->rotation);
-            //printf("%d %d %d %d %c", state->cx, state->cy, state->cz, state->pattern[0], state->rotation);
-            //while (state != NULL)
-            //{
-            //    printf("%c\t", state->rotation);
-            printf("pai: %c\n", state->pai->rotation);
-            //    state = state->pai;
-            //}
-            imprimePilha(pFinal);
-            return 1;
+           //printa moves
+           printf("sucesso com %d moves\n", state->moves);
+           print_open(state->pattern);
+           imprimePilha(pFinal);
+           return 1;
         }
+
         if (state->moves < 14)
         {
-            //push(pFinal, state);
-            if (state->cz < 3)
+            if (state->cz < 2 && state->cNz == 0)
                 sucessora(p, state, 'z');
-            if (state->cy < 3)
+            if (state->cNz < 1 && state->cz == 0)
+                sucessora(p, state, 'Z');
+
+            if (state->cy < 2 && state->cNy == 0)
                 sucessora(p, state, 'y');
-            if (state->cx < 3)
-            {
+            if (state->cNy < 1 && state->cy == 0)
+                sucessora(p, state, 'Y');
+
+            if (state->cx < 2 && state->cNx == 0)
                 sucessora(p, state, 'x'); //soma cx em 1
-            }
+            if (state->cNx < 1 && state->cx == 0)
+                sucessora(p, state, 'X');
         }
-//        else // Proteção contra pilha vazia
-//        {
-//            No* discard = pop(pFinal);
-//            // Opcional: Libere a memória de discard se necessário
-//        }
-        //}
-        //getchar();
+        //nao preciso de moves--; em else aqui
     }
     return 0;
 }

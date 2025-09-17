@@ -140,7 +140,7 @@ void shuffle(int cube[], int max)
 
 int dfs(Pilha* p, No* original_state, int ideal_state[], int *moves) //mudar para original_state//
 {
-    DEBUG_PRINTF("[Debug] entrou na func\n");
+    //DEBUG_PRINTF("[Debug] entrou na func\n");
     print_open(original_state->pattern); //mudar para original_state//
     push(p, original_state); //mudar para original_state//
     print_open(p->Topo->pattern);
@@ -243,6 +243,88 @@ int dfs(Pilha* p, No* original_state, int ideal_state[], int *moves) //mudar par
             getchar();
         //}
     //getchar();
+    }
+    free(state);
+    return 0;
+}
+
+
+
+int dfss(Pilha* p, No* state, int ideal_state[], int *moves) //mudar para original_state//
+{
+    print_open(state->pattern); //mudar para original_state//
+    push(p, state); //mudar para original_state//
+    print_open(p->Topo->pattern);
+    while (!vaziaPilha(p))
+    {
+        push(p, state);
+        state = top(p);
+        //memcpy(state->pattern, p->Topo->pattern, 24 * sizeof(int));// talvez eu esteja alocando muito, so preciso atualizar o ->prox acho //
+        if (memcmp(state->pattern, ideal_state, 24 * sizeof(int)) == 0)
+        {
+            print_open(state->pattern);
+            imprimePilha(p);
+            printf("\n\n");
+            free(state);
+            return 1;
+        }
+        if ((*moves) < 14) //se der pau, <=
+        {
+            switch (state->status)
+            {
+            case 'X':
+                if (state->cx < 3)
+                {
+                rotate_x(state->pattern);          //funcao sucessora begin
+                state->cx = p->Topo->cx + 1;
+                state->cy = 0;
+                state->cz = 0;
+                //push(p, state); //arrumar push
+                updateParent(p->Topo->prox, top(p));
+                (*moves)++;                       //funcao sucessora end
+                break;
+                }
+            state->status = 'Y'; //rotation, nao status
+            /* fallthrough */
+            case 'Y':
+                if (state->cy < 3)
+                {
+                rotate_y(state->pattern);       //funcao sucessora begin
+                state->cx = 0;
+                state->cy = p->Topo->cy + 1;
+                state->cz = 0;
+                //push(p, state);
+                updateParent(p->Topo->prox, top(p));
+                (*moves)++;                     //funcao sucessora end
+                break;
+                }
+            state->status = 'Z';
+            /* fallthrough */
+            case 'Z':
+                if (p->Topo->cz < 3)
+                {
+                rotate_z(state->pattern);                //funcao sucessora begin
+                state->cx = 0;
+                state->cy = 0;
+                state->cz = p->Topo->cz + 1;
+                //push(p, state);
+                updateParent(p->Topo->prox, top(p));
+                (*moves)++;                    //funcao sucessora end
+                break;
+                }
+            state->status = 'C';
+            /* fallthrough */
+            default:
+                pop(p); //ARRUMAR SE NECESSARIO
+                (*moves)--;
+                break;
+            }
+        }
+        else
+        {
+            pop(p);
+            (*moves)--;
+        }
     }
     free(state);
     return 0;

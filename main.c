@@ -26,7 +26,24 @@ int main()
         //int moves = 0;
         print_open(correct_state);
         Pilha *p_states = CriaPilha();
-        shuffle(current_state, 20); //usar 6 pada debug
+        //rotate_y(current_state);
+        rotate_x(current_state);
+        rotate_y(current_state);
+        rotate_z(current_state);
+        /*rotate_y(current_state);
+        rotate_z(current_state);
+        rotate_x(current_state);
+        rotate_y(current_state);
+        rotate_x(current_state);
+        rotate_x(current_state);
+        rotate_y(current_state);
+        rotate_x(current_state);
+        rotate_y(current_state);
+        rotate_x(current_state);
+        rotate_y(current_state);
+        rotate_x(current_state);
+        rotate_y(current_state);*/
+        //shuffle(current_state, 20); //usar 6 pada debug
         //rotate_y(current_state);
         //rotate_y(current_state);
         //rotate_y(current_state);

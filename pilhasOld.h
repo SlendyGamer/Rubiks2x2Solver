@@ -70,7 +70,7 @@ if (t == NULL)
 }
 else
 {
-    memcpy(aux, state, sizeof(No));
+    memcpy(aux, state, sizeof(No)); //talvez nao seja necessario copiar tudo
     //printf("[Debug] status do topo: %c\n", t->status);
     aux->rotation = aux->status;
     //printf("[Debug] status do topo apos: %c\n", aux->rotation);
