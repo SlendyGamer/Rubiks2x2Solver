@@ -110,20 +110,6 @@ void imprimePilha(Pilha *p)
 {
     No* q = malloc(sizeof(No));
     q = p->Topo;
-    /*
-    if(!p)
-    {
-        printf("\n\n\tPILHA VAZIA!!!!\n\n");
-    }
-    else
-    {
-        printf("\n\n\tImpress�o da Pilha: ");
-        for (q=p->Topo; q!=NULL; q=q->prox)
-        {
-            printf(" %c",q->rotation);
-        }
-        printf("\n\n");
-    }*/
     int i = -1;
 while(q != NULL){
         i++;

@@ -21,10 +21,6 @@ No* rotate_x(No* state) //ok
     state->pattern[14] = state->pattern[15];
     state->pattern[15] = aux; //ok
 
-    //state->cx++;
-    //state->cy = 0;
-    //state->cz = 0;
-
     return state;
 }
 
@@ -47,10 +43,6 @@ No* rotate_NOTx(No* state) //ok
     state->pattern[15] = state->pattern[14];
     state->pattern[14] = state->pattern[10];
     state->pattern[10] = aux; //ok
-
-    //state->cx++;
-    //state->cy = 0;
-    //state->cz = 0;
 
     return state;
 }
@@ -75,10 +67,6 @@ No* rotate_y(No* state) //ok
     state->pattern[7] = state->pattern[11];
     state->pattern[11] = aux; //ok
 
-    //state->cx =0;
-    //state->cy++;
-    //state->cz = 0;
-
     return state;
 }
 
@@ -101,10 +89,6 @@ No* rotate_NOTy(No* state) //ok
     state->pattern[11] = state->pattern[7];
     state->pattern[7] = state->pattern[3];
     state->pattern[3] = aux; //ok
-
-    //state->cx =0;
-    //state->cy++;
-    //state->cz = 0;
 
     return state;
 }
@@ -129,10 +113,6 @@ No* rotate_z(No* state) //ok
     state->pattern[17] = state->pattern[18];
     state->pattern[18] = aux; //ok
 
-    //state->cx = 0;
-    //state->cy = 0;
-    //state->cz++;
-
     return state;
 }
 
@@ -155,10 +135,6 @@ No* rotate_NOTz(No* state) //ok
     state->pattern[18] = state->pattern[17];
     state->pattern[17] = state->pattern[1];
     state->pattern[1] = aux; //ok
-
-    //state->cx = 0;
-    //state->cy = 0;
-    //state->cz++;
 
     return state;
 }
@@ -211,7 +187,6 @@ void shuffle(No* cube, int max)
                 break;
         }
     }
-    //system("pause");
 }
 
 void sucessora(Pilha *p, No* state, char dir)
@@ -348,7 +323,6 @@ int dfs(Pilha *p, No* state, int solution[])
             if (state->cNx < 1 && state->cx == 0)
                 sucessora(p, state, 'X');
         }
-        //nao preciso de moves--; em else aqui
     }
     return 0;
 }
@@ -459,12 +433,10 @@ int bfs(Fila *f, No* state, int solution[])
     while(!VaziaFila(f))
     {
         state = RetiraFila(f);
-        //printf("rotation: %c\n",state->rotation);
         InsereFila(fFinal, state);
 
         if(memcmp(state->pattern, solution, 24 * sizeof(int)) == 0)
         {
-           //printa moves
            printf("sucesso com %d moves\n", state->moves);
            print_open(state->pattern);
            imprimeFila(fFinal);
@@ -488,11 +460,8 @@ int bfs(Fila *f, No* state, int solution[])
             if (state->cNx < 1 && state->cx == 0)
                 sucessoraBFS(f, state, 'X');
         }
-        //nao preciso de moves--; em else aqui
     }
     return 0;
 }
-
-
 
 #endif
