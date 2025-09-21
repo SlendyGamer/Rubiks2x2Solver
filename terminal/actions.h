@@ -3,138 +3,156 @@
 
 No* rotate_x(No* state) //ok
 {
-    int aux = state->pattern[1];
-    state->pattern[1] = state->pattern[11];
-    state->pattern[11] = state->pattern[12];
-    state->pattern[12] = state->pattern[16];
-    state->pattern[16] = aux; //ok
+    // Ciclo 1: 1 → 11 → 12 → 16 → 1
+    int aux = state->pattern[3];
+    state->pattern[3] = state->pattern[19];
+    state->pattern[19] = state->pattern[4];
+    state->pattern[4] = state->pattern[23];
+    state->pattern[23] = aux;
 
-    aux = state->pattern[17];
-    state->pattern[17] = state->pattern[2];
-    state->pattern[2] = state->pattern[9];
-    state->pattern[9] = state->pattern[13];
-    state->pattern[13] = aux; //ok
+    // Ciclo 2: 17 → 2 → 9 → 13 → 17
+    aux = state->pattern[1];
+    state->pattern[1] = state->pattern[17];
+    state->pattern[17] = state->pattern[6];
+    state->pattern[6] = state->pattern[21];
+    state->pattern[21] = aux;
 
-    aux = state->pattern[0];
-    state->pattern[0] = state->pattern[10];
-    state->pattern[10] = state->pattern[14];
+    // Ciclo 3: 0 → 10 → 14 → 15 → 0
+    aux = state->pattern[14];
     state->pattern[14] = state->pattern[15];
-    state->pattern[15] = aux; //ok
+    state->pattern[15] = state->pattern[13];
+    state->pattern[13] = state->pattern[12];
+    state->pattern[12] = aux; //ok
 
     return state;
 }
 
 No* rotate_NOTx(No* state) //ok
 {
-    int aux = state->pattern[1];
-    state->pattern[1] = state->pattern[16];
-    state->pattern[16] = state->pattern[12];
-    state->pattern[12] = state->pattern[11];
-    state->pattern[11] = aux; //ok
+    // Ciclo 1: 1 → 16 → 12 → 11 → 1
+    int aux = state->pattern[3];
+    state->pattern[3] = state->pattern[23];
+    state->pattern[23] = state->pattern[4];
+    state->pattern[4] = state->pattern[19];
+    state->pattern[19] = aux;
 
-    aux = state->pattern[17];
-    state->pattern[17] = state->pattern[13];
-    state->pattern[13] = state->pattern[9];
-    state->pattern[9] = state->pattern[2];
-    state->pattern[2] = aux; //ok
+    // Ciclo 2: 17 → 13 → 9 → 2 → 17
+    aux = state->pattern[1];
+    state->pattern[1] = state->pattern[21];
+    state->pattern[21] = state->pattern[6];
+    state->pattern[6] = state->pattern[17];
+    state->pattern[17] = aux;
 
-    aux = state->pattern[0];
-    state->pattern[0] = state->pattern[15];
-    state->pattern[15] = state->pattern[14];
-    state->pattern[14] = state->pattern[10];
-    state->pattern[10] = aux; //ok
+    // Ciclo 3: 0 → 15 → 14 → 10 → 0
+    aux = state->pattern[14];
+    state->pattern[14] = state->pattern[12];
+    state->pattern[12] = state->pattern[13];
+    state->pattern[13] = state->pattern[15];
+    state->pattern[15] = aux; //ok
 
     return state;
 }
 
 No* rotate_y(No* state) //ok
 {
-    int aux = state->pattern[0];
-    state->pattern[0] = state->pattern[4];
-    state->pattern[4] = state->pattern[8];
-    state->pattern[8] = state->pattern[9];
-    state->pattern[9] = aux; //ok
+    // Ciclo 1: 0 → 4 → 8 → 9 → 0
+    int aux = state->pattern[14];
+    state->pattern[14] = state->pattern[2];
+    state->pattern[2] = state->pattern[10];
+    state->pattern[10] = state->pattern[6];
+    state->pattern[6] = aux;
 
-    aux = state->pattern[10];
-    state->pattern[10] = state->pattern[1];
-    state->pattern[1] = state->pattern[5];
-    state->pattern[5] = state->pattern[6];
-    state->pattern[6] = aux; //ok
+    // Ciclo 2: 10 → 1 → 5 → 6 → 10
+    aux = state->pattern[15];
+    state->pattern[15] = state->pattern[3];
+    state->pattern[3] = state->pattern[11];
+    state->pattern[11] = state->pattern[7];
+    state->pattern[7] = aux;
 
-    aux = state->pattern[2];
-    state->pattern[2] = state->pattern[3];
-    state->pattern[3] = state->pattern[7];
-    state->pattern[7] = state->pattern[11];
-    state->pattern[11] = aux; //ok
+    // Ciclo 3: 2 → 3 → 7 → 11 → 2
+    aux = state->pattern[17];
+    state->pattern[17] = state->pattern[16];
+    state->pattern[16] = state->pattern[18];
+    state->pattern[18] = state->pattern[19];
+    state->pattern[19] = aux; //ok
 
     return state;
 }
 
 No* rotate_NOTy(No* state) //ok
 {
-    int aux = state->pattern[0];
-    state->pattern[0] = state->pattern[9];
-    state->pattern[9] = state->pattern[8];
-    state->pattern[8] = state->pattern[4];
-    state->pattern[4] = aux; //ok
+    // Ciclo 1: 0 → 9 → 8 → 4 → 0
+    int aux = state->pattern[14];
+    state->pattern[14] = state->pattern[6];
+    state->pattern[6] = state->pattern[10];
+    state->pattern[10] = state->pattern[2];
+    state->pattern[2] = aux;
 
-    aux = state->pattern[10];
-    state->pattern[10] = state->pattern[6];
-    state->pattern[6] = state->pattern[5];
-    state->pattern[5] = state->pattern[1];
-    state->pattern[1] = aux; //ok
+    // Ciclo 2: 10 → 6 → 5 → 1 → 10
+    aux = state->pattern[15];
+    state->pattern[15] = state->pattern[7];
+    state->pattern[7] = state->pattern[11];
+    state->pattern[11] = state->pattern[3];
+    state->pattern[3] = aux;
 
-    aux = state->pattern[2];
-    state->pattern[2] = state->pattern[11];
-    state->pattern[11] = state->pattern[7];
-    state->pattern[7] = state->pattern[3];
-    state->pattern[3] = aux; //ok
+    // Ciclo 3: 2 → 11 → 7 → 3 → 2
+    aux = state->pattern[17];
+    state->pattern[17] = state->pattern[19];
+    state->pattern[19] = state->pattern[18];
+    state->pattern[18] = state->pattern[16];
+    state->pattern[16] = aux; //ok
 
     return state;
 }
 
 No* rotate_z(No* state) //ok
 {
-    int aux = state->pattern[2];
-    state->pattern[2] = state->pattern[15];
-    state->pattern[15] = state->pattern[19];
-    state->pattern[19] = state->pattern[5];
-    state->pattern[5] = aux; //ok
+    // Ciclo 1: 5 → 2 → 15 → 19 → 5
+    int aux = state->pattern[11];
+    state->pattern[11] = state->pattern[17];
+    state->pattern[17] = state->pattern[12];
+    state->pattern[12] = state->pattern[22];
+    state->pattern[22] = aux;
 
-    aux = state->pattern[3];
-    state->pattern[3] = state->pattern[0];
-    state->pattern[0] = state->pattern[16];
-    state->pattern[16] = state->pattern[20];
-    state->pattern[20] = aux; //ok
+    // Ciclo 2: 20 → 3 → 0 → 16 → 20
+    aux = state->pattern[9];
+    state->pattern[9] = state->pattern[16];
+    state->pattern[16] = state->pattern[14];
+    state->pattern[14] = state->pattern[23];
+    state->pattern[23] = aux;
 
-    aux = state->pattern[4];
-    state->pattern[4] = state->pattern[1];
-    state->pattern[1] = state->pattern[17];
-    state->pattern[17] = state->pattern[18];
-    state->pattern[18] = aux; //ok
+    // Ciclo 3: 4 → 1 → 17 → 18 → 4
+    aux = state->pattern[2];
+    state->pattern[2] = state->pattern[3];
+    state->pattern[3] = state->pattern[1];
+    state->pattern[1] = state->pattern[0];
+    state->pattern[0] = aux; //ok
 
     return state;
 }
 
 No* rotate_NOTz(No* state) //ok
 {
-    int aux = state->pattern[2];
-    state->pattern[2] = state->pattern[5];
-    state->pattern[5] = state->pattern[19];
-    state->pattern[19] = state->pattern[15];
-    state->pattern[15] = aux; //ok
+    // Ciclo 1: 5 → 19 → 15 → 2 → 5
+    int aux = state->pattern[11];
+    state->pattern[11] = state->pattern[22];
+    state->pattern[22] = state->pattern[12];
+    state->pattern[12] = state->pattern[17];
+    state->pattern[17] = aux;
 
-    aux = state->pattern[3];
-    state->pattern[3] = state->pattern[20];
-    state->pattern[20] = state->pattern[16];
-    state->pattern[16] = state->pattern[0];
-    state->pattern[0] = aux; //ok
+    // Ciclo 2: 20 → 16 → 0 → 3 → 20
+    aux = state->pattern[9];
+    state->pattern[9] = state->pattern[23];
+    state->pattern[23] = state->pattern[14];
+    state->pattern[14] = state->pattern[16];
+    state->pattern[16] = aux;
 
-    aux = state->pattern[4];
-    state->pattern[4] = state->pattern[18];
-    state->pattern[18] = state->pattern[17];
-    state->pattern[17] = state->pattern[1];
-    state->pattern[1] = aux; //ok
+    // Ciclo 3: 4 → 18 → 17 → 1 → 4
+    aux = state->pattern[2];
+    state->pattern[2] = state->pattern[0];
+    state->pattern[0] = state->pattern[1];
+    state->pattern[1] = state->pattern[3];
+    state->pattern[3] = aux; //ok
 
     return state;
 }

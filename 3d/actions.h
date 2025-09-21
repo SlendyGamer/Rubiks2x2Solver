@@ -32,6 +32,7 @@ No* rotate_xX(No* state) //ok
 
 No* rotate_NOTxX(No* state) //ok
 {
+    // Ciclo 1: 1 → 16 → 12 → 11 → 1
     int aux = state->pattern[3];
     state->pattern[3] = state->pattern[23];
     state->pattern[23] = state->pattern[4];

@@ -20,7 +20,14 @@ int main()
         Retornar "Sem solução"*/
         srand(SEED);
         ////viewer                                 =(B0,A1,E3,E2,A0,D1,C1,E0,D0,C0, B1, E1, C2, F3, B3, B2, F1, A3, A2, F0, D3, C3, D2, F2); APENAS PARA VISUALIZAR
-        int correct_state[FACES] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23};
+        int correct_state[FACES] = {
+        18, 17, 4, 1,        // Front face (4 quads)
+        12, 21, 9, 6,        // Back face
+        22, 20, 8, 5,        // Left face
+        15, 14, 0, 10,       // Right face
+        3, 2, 7, 11,         // Top face
+        23, 13, 19, 16       // Bottom face
+        };
 
         No* current_state = malloc(sizeof(No));
         memcpy(current_state->pattern, correct_state, 24 * sizeof(int));
