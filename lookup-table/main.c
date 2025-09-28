@@ -12,12 +12,15 @@ int rank_position(int *position);
 int rank_orientation(int *orientation);
 int factorial(int n);
 void print_array(int *arr, int n);
+int** create_table();
 
 int main() {
 
+    int i;
+
     int orientation_rank_ceil = pow(3, CORNERS);
 
-    int** table = create_array();
+    int** table = create_table();
 
     // loop para chamar para cada estado no bfs
     for(i = 0; i < BLOCK_SIZE; i++) {
@@ -28,7 +31,7 @@ int main() {
     FILE *f = fopen(FILE_NAME, "wb");
     if (!f) {
         perror("fopen");
-        return;
+        exit(1);
     }
 
     for(i = 0; i < TOTAL_STATES / BLOCK_SIZE; i++) {
@@ -92,13 +95,13 @@ int process_24array(int *in_array, int orientation_rank_ceil) {
 
     // pega o vetor de 24 inteiros e separa em 7 corners (trios) - corners nao ordenadas, mas na ordem da position
     int corner_mat[CORNERS][3] = {
-        {sample_arr[4], sample_arr[21], sample_arr[13]},    // POSITION 0
-        {sample_arr[12], sample_arr[23], sample_arr[1]},    // POSITION 1
-        {sample_arr[0], sample_arr[22], sample_arr[9]},     // POSITION 2
-        {sample_arr[16], sample_arr[2], sample_arr[11]},    // POSITION 3
-        {sample_arr[7], sample_arr[18], sample_arr[10]},    // POSITION 4
-        {sample_arr[6], sample_arr[15], sample_arr[19]},    // POSITION 5
-        {sample_arr[14], sample_arr[3], sample_arr[5]}      // POSITION 6
+        {in_array[4], in_array[21], in_array[13]},    // POSITION 0
+        {in_array[12], in_array[23], in_array[1]},    // POSITION 1
+        {in_array[0], in_array[22], in_array[9]},     // POSITION 2
+        {in_array[16], in_array[2], in_array[11]},    // POSITION 3
+        {in_array[7], in_array[18], in_array[10]},    // POSITION 4
+        {in_array[6], in_array[15], in_array[19]},    // POSITION 5
+        {in_array[14], in_array[3], in_array[5]}      // POSITION 6
     };
 
     int temp_position[CORNERS];
@@ -176,25 +179,27 @@ void print_array(int *arr, int n) {
 }
 
 int** load_table() {
-    table = create_table();
+    int i;
+    int** table = create_table();
 
     FILE *f = fopen(FILE_NAME, "rb");
     if (!f) {
         perror("Erro ao abrir arquivo");
-        return 1;
+        exit(1);
     }
 
     for(i = 0; i < TOTAL_STATES / BLOCK_SIZE; i++) {
         size_t read = fread(table[i], sizeof(int), BLOCK_SIZE, f);
         if (read != BLOCK_SIZE) {
             fprintf(stderr, "Erro: bloco %d incompleto\n", i);
-            return 1;
+            exit(1);
         }
     }
 
 }
 
 int** create_table() {
+    int i;
     // aloca o array principal
     int **main_array = (int**)malloc((TOTAL_STATES / BLOCK_SIZE) * sizeof(int*));
 
@@ -207,6 +212,7 @@ int** create_table() {
 }
 
 int** free_table(int **table) {
+    int i;
     for(i = 0; i < TOTAL_STATES / BLOCK_SIZE; i++) {
         free(table[i]);
     }
