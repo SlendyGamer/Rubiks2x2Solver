@@ -18,7 +18,7 @@ void animateRotation(int value);
 
 Pilha* path = NULL;
 
-float colors[24][3] = {
+float colors[25][3] = {
     {1.0f, 0.0f, 0.0f},  // 0: red
     {1.0f, 1.0f, 1.0f},  // 1: white
     {0.0f, 0.0f, 1.0f},  // 2: blue
@@ -42,7 +42,8 @@ float colors[24][3] = {
     {1.0f, 0.5f, 0.0f},  // 20: orange
     {1.0f, 1.0f, 0.0f},  // 21: yellow
     {1.0f, 0.5f, 0.0f},  // 22: orange
-    {0.0f, 1.0f, 0.0f}   // 23: green
+    {0.0f, 1.0f, 0.0f},  // 23: green
+    {0.35f, 0.35f, 0.35f}   // 24: gray
 };
 
 // Array global que mapeia cada quad a um índice de cor
@@ -117,6 +118,21 @@ void drawCube(void) {
             drawQuad(delta, -1.0f, delta,    1.0f, -1.0f, delta,    1.0f, -1.0f, 1.0f,    delta, -1.0f, 1.0f, quadValues[23]); // Base Top-right
             drawQuad(delta, 1.0f, 1.0f,    1.0f, 1.0f, 1.0f,    1.0f, 1.0f, delta,    delta, 1.0f, delta, quadValues[17]); // Topo Bottom-right
             drawQuad(delta, 1.0f, -delta,    1.0f, 1.0f, -delta,    1.0f, 1.0f, -1.0f,    delta, 1.0f, -1.0f, quadValues[19]); // Topo Top-right
+            //faces internas
+            drawQuad(1.0f, 1.0f, -1.0f,      1.0f, 0.0f, -1.0f,    1.0f, 0.0f, 0.0f,     1.0f, 1.0f, 0.0f,    24); //top right X backVIEW frontSIDE (x)
+            drawQuad(1.0f, 1.0f, 1.0f,       1.0f, 1.0f, 0.0f,    1.0f, 0.0f, 0.0f,     1.0f, 0.0f, 1.0f,    24); //top left X backVIEW frontSIDE (x)
+            drawQuad(1.0f, -1.0f, -1.0f,     1.0f, -1.0f, 0.0f,    1.0f, 0.0f, 0.0f,     1.0f, 0.0f, -1.0f,    24); //bottom right X backVIEW frontSIDE (x)
+            drawQuad(1.0f, -1.0f, 1.0f,      1.0f, 0.0f, 1.0f,    1.0f, 0.0f, 0.0f,     1.0f, -1.0f, 0.0f,    24); //bottom left X backVIEW frontSIDE (x)
+            drawQuad(1.0f, -1.0f, -1.0f,      0.0f, -1.0, -1.0f,    0.0f, -1.0, 0.0f,     1.0f, -1.0, 0.0f,    24); //top right Y frontVIEW backSIDE ()
+            drawQuad(1.0f, 1.0f, -1.0f,      1.0f, 1.0f, 0.0f,    0.0f, 1.0f, 0.0f,     0.0f, 1.0f, -1.0f,    24); //top right Y backVIEW frontSIDE (y)
+            drawQuad(1.0f, -1.0f, 1.0f,       1.0f, -1.0f, 0.0f,    0.0f, -1.0f, 0.0f,     0.0f, -1.0f, 1.0f,     24); //bottom right Y frontVIEW backSIDE ()
+            drawQuad(1.0f, 1.0f, 1.0f,      0.0f, 1.0f, 1.0f,    0.0f, 1.0f, 0.0f,     1.0f, 1.0f, 0.0f,    24); //bottom right Y backVIEW frontSIDE (y)
+            drawQuad(1.0f, 1.0f, -1.0f,       0.0f, 1.0f, -1.0,     0.0f, 0.0f, -1.0,      1.0f, 0.0f, -1.0,    24); //top right Z frontVIEW backSIDE ()
+            drawQuad(1.0f, 1.0f, 1.0f,       1.0f, 0.0f, 1.0f,     0.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,    24); //top right Z backVIEW frontSIDE (z)
+            drawQuad(1.0f, -1.0f, -1.0f,      1.0f, 0.0f, -1.0f,     0.0f, 0.0f, -1.0f,       0.0f, -1.0f, -1.0f,    24); //bottom right Z frontVIEW backSIDE ()
+            drawQuad(1.0f, -1.0f, 1.0f,      0.0f, -1.0f, 1.0f,     0.0f, 0.0f, 1.0f,       1.0f, 0.0f, 1.0f,    24); //bottom right Z backVIEW frontSIDE (z)
+
+            drawQuad(0.0f, 1.0f, 1.0f,      0.0f, -1.0f, 1.0f,     0.0f, -1.0f, -1.0f,      0.0f, 1.0f, -1.0f,    24); //middle frontVIEW x    
             glPopMatrix();
             // Faces não rotacionantes
             drawQuad(-1.0f, -1.0f, 1.0f,    -delta, -1.0f, 1.0f,    -delta, -delta, 1.0f,    -1.0f, -delta, 1.0f, quadValues[0]); // Frente Bottom-left
@@ -131,6 +147,22 @@ void drawCube(void) {
             drawQuad(-delta, delta, -1.0f,    -1.0f, delta, -1.0f,    -1.0f, 1.0f, -1.0f,      -delta, 1.0f, -1.0f, quadValues[7]); // Trás Top-right
             drawQuad(-1.0f, -1.0f, -1.0f,    -delta, -1.0f, -1.0f,    -delta, -1.0f, -delta,    -1.0f, -1.0f, -delta, quadValues[20]); // Base Bottom-left
             drawQuad(-1.0f, -1.0f, delta,    -delta, -1.0f, delta,    -delta, -1.0f, 1.0f,   -1.0f, -1.0f, 1.0f, quadValues[22]); // Base Top-left
+            //faces internas
+            drawQuad(-1.0, 1.0f, -1.0f,      -1.0, 1.0f, 0.0f,     -1.0, 0.0f, 0.0f,      -1.0, 0.0f, -1.0f,    24); //top right X frontVIEW backSIDE ()
+            drawQuad(-1.0f, 1.0f, 1.0f,       -1.0f, 0.0f, 1.0f,    -1.0f, 0.0f, 0.0f,     -1.0f, 1.0f, 0.0f,    24); //top left X frontVIEW backSIDE ()
+            drawQuad(-1.0f, -1.0f, -1.0f,     -1.0f, 0.0f, -1.0f,    -1.0f, 0.0f, 0.0f,     -1.0f, -1.0f, 0.0f,    24); //bottom right X frontVIEW backSIDE ()
+            drawQuad(-1.0f, -1.0f, 1.0f,      -1.0f, -1.0f, 0.0f,    -1.0f, 0.0f, 0.0f,     -1.0f, 0.0f, 1.0f,    24); //bottom left X frontVIEW backSIDE ()
+            drawQuad(-1.0f, -1.0f, -1.0f,     -1.0f, -1.0f, 0.0f,    0.0f, -1.0f, 0.0f,    0.0f, -1.0f, -1.0f,    24); //top left Y frontVIEW backSIDE ()
+            drawQuad(-1.0f, 1.0f, -1.0f,     0.0f, 1.0f, -1.0f,    0.0f, 1.0f, 0.0f,     -1.0f, 1.0f, 0.0f,   24); //top left Y backVIEW frontSIDE (y)
+            drawQuad(-1.0f, -1.0f, 1.0f,      0.0f, -1.0f, 1.0f,    0.0f, -1.0f, 0.0f,     -1.0f, -1.0f, 0.0f,    24); //bottom left Y frontVIEW backSIDE ()
+            drawQuad(-1.0f, 1.0f, 1.0f,      -1.0f, 1.0f, 0.0f,    0.0f, 1.0f, 0.0f,     0.0f, 1.0f, 1.0f,    24); //bottom left Y backVIEW frontSIDE (y)
+            drawQuad(-1.0f, 1.0f, -1.0f,      -1.0f, 0.0f, -1.0f,     0.0f, 0.0f, -1.0f,      0.0f, 1.0f, -1.0f,    24); //top left Z frontVIEW backSIDE ()
+            drawQuad(-1.0f, 1.0f, 1.0f,      0.0f, 1.0f, 1.0f,     0.0f, 0.0f, 1.0f,      -1.0f, 0.0f, 1.0f,    24); //top left Z backVIEW frontSIDE (z)
+            drawQuad(-1.0f, -1.0f, -1.0f,      0.0f, -1.0f, -1.0f,     0.0f, 0.0f, -1.0f,      -1.0f, 0.0f, -1.0f,    24); //bottom left Z frontVIEW backSIDE ()
+            drawQuad(-1.0f, -1.0f, 1.0f,      -1.0f, 0.0f, 1.0f,     0.0f, 0.0f, 1.0f,      0.0f, -1.0f, 1.0f,    24); //bottom left Z backVIEW frontSIDE (z)
+
+            drawQuad(0.0f, 1.0f, 1.0f,      0.0f, 1.0f, -1.0f,     0.0f, -1.0f, -1.0f,      0.0f, -1.0f, 1.0f,    24); //middle backVIEW x
+            
         } else if (currentAxis == 'y'|| currentAxis == 'Y') {
             glPushMatrix();
             if (currentAxis == 'y')
@@ -151,6 +183,21 @@ void drawCube(void) {
             drawQuad(-1.0f, delta, 1.0f,     -1.0f, 1.0f, 1.0f,      -1.0f, 1.0f, delta,    -1.0f, delta, delta, quadValues[11]); // Esquerda Top-right
             drawQuad(1.0f, delta, delta,    1.0f, 1.0f, delta,    1.0f, 1.0f, 1.0f,    1.0f, delta, 1.0f, quadValues[14]); // Direita Top-left
             drawQuad(1.0f, delta, -delta,    1.0f, delta, -1.0f,    1.0f, 1.0f, -1.0f,    1.0f, 1.0f, -delta, quadValues[15]); // Direita Top-right
+            //faces internas
+            drawQuad(1.0f, 1.0f, -1.0f,      1.0f, 1.0f, 0.0f,    0.0f, 1.0f, 0.0f,     0.0f, 1.0f, -1.0f,    24); //top right Y backVIEW frontSIDE (y)
+            drawQuad(-1.0f, 1.0f, -1.0f,     0.0f, 1.0f, -1.0f,    0.0f, 1.0f, 0.0f,     -1.0f, 1.0f, 0.0f,   24); //top left Y backVIEW frontSIDE (y)
+            drawQuad(1.0f, 1.0f, 1.0f,      0.0f, 1.0f, 1.0f,    0.0f, 1.0f, 0.0f,     1.0f, 1.0f, 0.0f,    24); //bottom right Y backVIEW frontSIDE (y)
+            drawQuad(-1.0f, 1.0f, 1.0f,      -1.0f, 1.0f, 0.0f,    0.0f, 1.0f, 0.0f,     0.0f, 1.0f, 1.0f,    24); //bottom left Y backVIEW frontSIDE (y)
+            drawQuad(-1.0, 1.0f, -1.0f,      -1.0, 1.0f, 0.0f,     -1.0, 0.0f, 0.0f,      -1.0, 0.0f, -1.0f,    24); //top right X frontVIEW backSIDE ()
+            drawQuad(1.0f, 1.0f, -1.0f,      1.0f, 0.0f, -1.0f,    1.0f, 0.0f, 0.0f,     1.0f, 1.0f, 0.0f,    24); //top right X backVIEW frontSIDE (x)
+            drawQuad(-1.0f, 1.0f, 1.0f,       -1.0f, 0.0f, 1.0f,    -1.0f, 0.0f, 0.0f,     -1.0f, 1.0f, 0.0f,    24); //top left X frontVIEW backSIDE ()
+            drawQuad(1.0f, 1.0f, 1.0f,       1.0f, 1.0f, 0.0f,    1.0f, 0.0f, 0.0f,     1.0f, 0.0f, 1.0f,    24); //top left X backVIEW frontSIDE (x)
+            drawQuad(1.0f, 1.0f, -1.0f,       0.0f, 1.0f, -1.0,     0.0f, 0.0f, -1.0,      1.0f, 0.0f, -1.0,    24); //top right Z frontVIEW backSIDE ()
+            drawQuad(1.0f, 1.0f, 1.0f,       1.0f, 0.0f, 1.0f,     0.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,    24); //top right Z backVIEW frontSIDE (z)
+            drawQuad(-1.0f, 1.0f, -1.0f,      -1.0f, 0.0f, -1.0f,     0.0f, 0.0f, -1.0f,      0.0f, 1.0f, -1.0f,    24); //top left Z frontVIEW backSIDE ()
+            drawQuad(-1.0f, 1.0f, 1.0f,      0.0f, 1.0f, 1.0f,     0.0f, 0.0f, 1.0f,      -1.0f, 0.0f, 1.0f,    24); //top left Z backVIEW frontSIDE (z)
+
+            drawQuad(-1.0f, 0.0f, -1.0f,      -1.0f, 0.0f, 1.0f,     1.0f, 0.0f, 1.0f,      1.0f, 0.0f, -1.0f,    24); //middle frontVIEW y    
             glPopMatrix();
             // Faces não rotacionantes
             drawQuad(-1.0f, -1.0f, 1.0f,    -delta, -1.0f, 1.0f,    -delta, -delta, 1.0f,    -1.0f, -delta, 1.0f, quadValues[0]); // Frente Bottom-left
@@ -165,6 +212,22 @@ void drawCube(void) {
             drawQuad(delta, -1.0f, -1.0f,    1.0f, -1.0f, -1.0f,    1.0f, -1.0f, -delta,    delta, -1.0f, -delta, quadValues[21]); // Base Bottom-right
             drawQuad(-1.0f, -1.0f, delta,    -delta, -1.0f, delta,    -delta, -1.0f, 1.0f,   -1.0f, -1.0f, 1.0f, quadValues[22]); // Base Top-left
             drawQuad(delta, -1.0f, delta,    1.0f, -1.0f, delta,    1.0f, -1.0f, 1.0f,    delta, -1.0f, 1.0f, quadValues[23]); // Base Top-right
+            //faces internas
+            drawQuad(1.0f, -1.0f, -1.0f,      0.0f, -1.0, -1.0f,    0.0f, -1.0, 0.0f,     1.0f, -1.0, 0.0f,    24); //top right Y frontVIEW backSIDE ()
+            drawQuad(-1.0f, -1.0f, -1.0f,     -1.0f, -1.0f, 0.0f,    0.0f, -1.0f, 0.0f,    0.0f, -1.0f, -1.0f,    24); //top left Y frontVIEW backSIDE ()
+            drawQuad(1.0f, -1.0f, 1.0f,       1.0f, -1.0f, 0.0f,    0.0f, -1.0f, 0.0f,     0.0f, -1.0f, 1.0f,     24); //bottom right Y frontVIEW backSIDE ()
+            drawQuad(-1.0f, -1.0f, 1.0f,      0.0f, -1.0f, 1.0f,    0.0f, -1.0f, 0.0f,     -1.0f, -1.0f, 0.0f,    24); //bottom left Y frontVIEW backSIDE ()
+            drawQuad(-1.0f, -1.0f, -1.0f,     -1.0f, 0.0f, -1.0f,    -1.0f, 0.0f, 0.0f,     -1.0f, -1.0f, 0.0f,    24); //bottom right X frontVIEW backSIDE ()
+            drawQuad(1.0f, -1.0f, -1.0f,     1.0f, -1.0f, 0.0f,    1.0f, 0.0f, 0.0f,     1.0f, 0.0f, -1.0f,    24); //bottom right X backVIEW frontSIDE (x)
+            drawQuad(-1.0f, -1.0f, 1.0f,      -1.0f, -1.0f, 0.0f,    -1.0f, 0.0f, 0.0f,     -1.0f, 0.0f, 1.0f,    24); //bottom left X frontVIEW backSIDE ()
+            drawQuad(1.0f, -1.0f, 1.0f,      1.0f, 0.0f, 1.0f,    1.0f, 0.0f, 0.0f,     1.0f, -1.0f, 0.0f,    24); //bottom left X backVIEW frontSIDE (x)
+            drawQuad(1.0f, -1.0f, -1.0f,      1.0f, 0.0f, -1.0f,     0.0f, 0.0f, -1.0f,       0.0f, -1.0f, -1.0f,    24); //bottom right Z frontVIEW backSIDE ()
+            drawQuad(1.0f, -1.0f, 1.0f,      0.0f, -1.0f, 1.0f,     0.0f, 0.0f, 1.0f,       1.0f, 0.0f, 1.0f,    24); //bottom right Z backVIEW frontSIDE (z)
+            drawQuad(-1.0f, -1.0f, -1.0f,      0.0f, -1.0f, -1.0f,     0.0f, 0.0f, -1.0f,      -1.0f, 0.0f, -1.0f,    24); //bottom left Z frontVIEW backSIDE ()
+            drawQuad(-1.0f, -1.0f, 1.0f,      -1.0f, 0.0f, 1.0f,     0.0f, 0.0f, 1.0f,      0.0f, -1.0f, 1.0f,    24); //bottom left Z backVIEW frontSIDE (z)
+
+            drawQuad(-1.0f, 0.0f, -1.0f,      1.0f, 0.0f, -1.0f,     1.0f, 0.0f, 1.0f,      -1.0f, 0.0f, 1.0f,    24); //middle backVIEW y
+            
         } else if (currentAxis == 'z'|| currentAxis == 'Z') {
             glPushMatrix();
             if (currentAxis == 'z')
@@ -185,6 +248,21 @@ void drawCube(void) {
             drawQuad(delta, 1.0f, 1.0f,    1.0f, 1.0f, 1.0f,    1.0f, 1.0f, delta,    delta, 1.0f, delta, quadValues[17]); // Topo Bottom-right
             drawQuad(-1.0f, -1.0f, delta,    -delta, -1.0f, delta,    -delta, -1.0f, 1.0f,   -1.0f, -1.0f, 1.0f, quadValues[22]); // Base Top-left
             drawQuad(delta, -1.0f, delta,    1.0f, -1.0f, delta,    1.0f, -1.0f, 1.0f,    delta, -1.0f, 1.0f, quadValues[23]); // Base Top-right
+            //faces internas
+            drawQuad(1.0f, 1.0f, 1.0f,       1.0f, 0.0f, 1.0f,     0.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,    24); //top right Z backVIEW frontSIDE (z)
+            drawQuad(-1.0f, 1.0f, 1.0f,      0.0f, 1.0f, 1.0f,     0.0f, 0.0f, 1.0f,      -1.0f, 0.0f, 1.0f,    24); //top left Z backVIEW frontSIDE (z)
+            drawQuad(1.0f, -1.0f, 1.0f,      0.0f, -1.0f, 1.0f,     0.0f, 0.0f, 1.0f,       1.0f, 0.0f, 1.0f,    24); //bottom right Z backVIEW frontSIDE (z)
+            drawQuad(-1.0f, -1.0f, 1.0f,      -1.0f, 0.0f, 1.0f,     0.0f, 0.0f, 1.0f,      0.0f, -1.0f, 1.0f,    24); //bottom left Z backVIEW frontSIDE (z)
+            drawQuad(-1.0f, 1.0f, 1.0f,       -1.0f, 0.0f, 1.0f,    -1.0f, 0.0f, 0.0f,     -1.0f, 1.0f, 0.0f,    24); //top left X frontVIEW backSIDE ()
+            drawQuad(1.0f, 1.0f, 1.0f,       1.0f, 1.0f, 0.0f,    1.0f, 0.0f, 0.0f,     1.0f, 0.0f, 1.0f,    24); //top left X backVIEW frontSIDE (x)
+            drawQuad(-1.0f, -1.0f, 1.0f,      -1.0f, -1.0f, 0.0f,    -1.0f, 0.0f, 0.0f,     -1.0f, 0.0f, 1.0f,    24); //bottom left X frontVIEW backSIDE ()
+            drawQuad(1.0f, -1.0f, 1.0f,      1.0f, 0.0f, 1.0f,    1.0f, 0.0f, 0.0f,     1.0f, -1.0f, 0.0f,    24); //bottom left X backVIEW frontSIDE (x)
+            drawQuad(1.0f, -1.0f, 1.0f,       1.0f, -1.0f, 0.0f,    0.0f, -1.0f, 0.0f,     0.0f, -1.0f, 1.0f,     24); //bottom right Y frontVIEW backSIDE ()
+            drawQuad(1.0f, 1.0f, 1.0f,      0.0f, 1.0f, 1.0f,    0.0f, 1.0f, 0.0f,     1.0f, 1.0f, 0.0f,    24); //bottom right Y backVIEW frontSIDE (y)
+            drawQuad(-1.0f, -1.0f, 1.0f,      0.0f, -1.0f, 1.0f,    0.0f, -1.0f, 0.0f,     -1.0f, -1.0f, 0.0f,    24); //bottom left Y frontVIEW backSIDE ()
+            drawQuad(-1.0f, 1.0f, 1.0f,      -1.0f, 1.0f, 0.0f,    0.0f, 1.0f, 0.0f,     0.0f, 1.0f, 1.0f,    24); //bottom left Y backVIEW frontSIDE (y)
+
+            drawQuad(-1.0f, -1.0f, 0.0f,      1.0f, -1.0f, 0.0f,     1.0f, 1.0f, 0.0f,      -1.0f, 1.0f, 0.0f,    24); //middle frontVIEW z
             glPopMatrix();
             // Faces não rotacionantes
             drawQuad(1.0f, -1.0f, -1.0f,      delta, -1.0f, -1.0f,    delta, -delta, -1.0f,    1.0f, -delta, -1.0f, quadValues[4]); // Trás Bottom-left
@@ -199,6 +277,22 @@ void drawCube(void) {
             drawQuad(delta, 1.0f, -delta,    1.0f, 1.0f, -delta,    1.0f, 1.0f, -1.0f,    delta, 1.0f, -1.0f, quadValues[19]); // Topo Top-right
             drawQuad(-1.0f, -1.0f, -1.0f,    -delta, -1.0f, -1.0f,    -delta, -1.0f, -delta,    -1.0f, -1.0f, -delta, quadValues[20]); // Base Bottom-left
             drawQuad(delta, -1.0f, -1.0f,    1.0f, -1.0f, -1.0f,    1.0f, -1.0f, -delta,    delta, -1.0f, -delta, quadValues[21]); // Base Bottom-right
+            //faces internas
+            drawQuad(1.0f, 1.0f, -1.0f,       0.0f, 1.0f, -1.0,     0.0f, 0.0f, -1.0,      1.0f, 0.0f, -1.0,    24); //top right Z frontVIEW backSIDE ()
+            drawQuad(-1.0f, 1.0f, -1.0f,      -1.0f, 0.0f, -1.0f,     0.0f, 0.0f, -1.0f,      0.0f, 1.0f, -1.0f,    24); //top left Z frontVIEW backSIDE ()
+            drawQuad(1.0f, -1.0f, -1.0f,      1.0f, 0.0f, -1.0f,     0.0f, 0.0f, -1.0f,       0.0f, -1.0f, -1.0f,    24); //bottom right Z frontVIEW backSIDE ()
+            drawQuad(-1.0f, -1.0f, -1.0f,      0.0f, -1.0f, -1.0f,     0.0f, 0.0f, -1.0f,      -1.0f, 0.0f, -1.0f,    24); //bottom left Z frontVIEW backSIDE ()
+            drawQuad(-1.0, 1.0f, -1.0f,      -1.0, 1.0f, 0.0f,     -1.0, 0.0f, 0.0f,      -1.0, 0.0f, -1.0f,    24); //top right X frontVIEW backSIDE ()
+            drawQuad(1.0f, 1.0f, -1.0f,      1.0f, 0.0f, -1.0f,    1.0f, 0.0f, 0.0f,     1.0f, 1.0f, 0.0f,    24); //top right X backVIEW frontSIDE (x)
+            drawQuad(-1.0f, -1.0f, -1.0f,     -1.0f, 0.0f, -1.0f,    -1.0f, 0.0f, 0.0f,     -1.0f, -1.0f, 0.0f,    24); //bottom right X frontVIEW backSIDE ()
+            drawQuad(1.0f, -1.0f, -1.0f,     1.0f, -1.0f, 0.0f,    1.0f, 0.0f, 0.0f,     1.0f, 0.0f, -1.0f,    24); //bottom right X backVIEW frontSIDE (x)
+            drawQuad(1.0f, -1.0f, -1.0f,      0.0f, -1.0, -1.0f,    0.0f, -1.0, 0.0f,     1.0f, -1.0, 0.0f,    24); //top right Y frontVIEW backSIDE ()
+            drawQuad(1.0f, 1.0f, -1.0f,      1.0f, 1.0f, 0.0f,    0.0f, 1.0f, 0.0f,     0.0f, 1.0f, -1.0f,    24); //top right Y backVIEW frontSIDE (y)
+            drawQuad(-1.0f, -1.0f, -1.0f,     -1.0f, -1.0f, 0.0f,    0.0f, -1.0f, 0.0f,    0.0f, -1.0f, -1.0f,    24); //top left Y frontVIEW backSIDE ()
+            drawQuad(-1.0f, 1.0f, -1.0f,     0.0f, 1.0f, -1.0f,    0.0f, 1.0f, 0.0f,     -1.0f, 1.0f, 0.0f,   24); //top left Y backVIEW frontSIDE (y)
+
+            drawQuad(-1.0f, -1.0f, 0.0f,      -1.0f, 1.0f, 0.0f,     1.0f, 1.0f, 0.0f,      1.0f, -1.0f, 0.0f,    24); //middle backVIEW z
+
         } else {
             // Sem rotação, desenha o cubo inteiro normalmente
             drawCubeNoRotation();
@@ -251,6 +345,35 @@ void drawCubeNoRotation(void) {
     drawQuad(delta, -1.0f, -1.0f,    1.0f, -1.0f, -1.0f,    1.0f, -1.0f, -delta,    delta, -1.0f, -delta, quadValues[quadIndex++]); // Bottom-right
     drawQuad(-1.0f, -1.0f, delta,    -delta, -1.0f, delta,    -delta, -1.0f, 1.0f,   -1.0f, -1.0f, 1.0f, quadValues[quadIndex++]); // Top-left
     drawQuad(delta, -1.0f, delta,    1.0f, -1.0f, delta,    1.0f, -1.0f, 1.0f,    delta, -1.0f, 1.0f, quadValues[quadIndex++]); // Top-right
+
+    //faces internas
+    drawQuad(-1.0, 1.0f, -1.0f,      -1.0, 1.0f, 0.0f,     -1.0, 0.0f, 0.0f,      -1.0, 0.0f, -1.0f,    24); //top right X frontVIEW backSIDE ()
+    drawQuad(1.0f, 1.0f, -1.0f,      1.0f, 0.0f, -1.0f,    1.0f, 0.0f, 0.0f,     1.0f, 1.0f, 0.0f,    24); //top right X backVIEW frontSIDE (x)
+    drawQuad(-1.0f, 1.0f, 1.0f,       -1.0f, 0.0f, 1.0f,    -1.0f, 0.0f, 0.0f,     -1.0f, 1.0f, 0.0f,    24); //top left X frontVIEW backSIDE ()
+    drawQuad(1.0f, 1.0f, 1.0f,       1.0f, 1.0f, 0.0f,    1.0f, 0.0f, 0.0f,     1.0f, 0.0f, 1.0f,    24); //top left X backVIEW frontSIDE (x)
+    drawQuad(-1.0f, -1.0f, -1.0f,     -1.0f, 0.0f, -1.0f,    -1.0f, 0.0f, 0.0f,     -1.0f, -1.0f, 0.0f,    24); //bottom right X frontVIEW backSIDE ()
+    drawQuad(1.0f, -1.0f, -1.0f,     1.0f, -1.0f, 0.0f,    1.0f, 0.0f, 0.0f,     1.0f, 0.0f, -1.0f,    24); //bottom right X backVIEW frontSIDE (x)
+    drawQuad(-1.0f, -1.0f, 1.0f,      -1.0f, -1.0f, 0.0f,    -1.0f, 0.0f, 0.0f,     -1.0f, 0.0f, 1.0f,    24); //bottom left X frontVIEW backSIDE ()
+    drawQuad(1.0f, -1.0f, 1.0f,      1.0f, 0.0f, 1.0f,    1.0f, 0.0f, 0.0f,     1.0f, -1.0f, 0.0f,    24); //bottom left X backVIEW frontSIDE (x)
+
+    drawQuad(1.0f, -1.0f, -1.0f,      0.0f, -1.0, -1.0f,    0.0f, -1.0, 0.0f,     1.0f, -1.0, 0.0f,    24); //top right Y frontVIEW backSIDE ()
+    drawQuad(1.0f, 1.0f, -1.0f,      1.0f, 1.0f, 0.0f,    0.0f, 1.0f, 0.0f,     0.0f, 1.0f, -1.0f,    24); //top right Y backVIEW frontSIDE (y)
+    drawQuad(-1.0f, -1.0f, -1.0f,     -1.0f, -1.0f, 0.0f,    0.0f, -1.0f, 0.0f,    0.0f, -1.0f, -1.0f,    24); //top left Y frontVIEW backSIDE ()
+    drawQuad(-1.0f, 1.0f, -1.0f,     0.0f, 1.0f, -1.0f,    0.0f, 1.0f, 0.0f,     -1.0f, 1.0f, 0.0f,   24); //top left Y backVIEW frontSIDE (y)
+    drawQuad(1.0f, -1.0f, 1.0f,       1.0f, -1.0f, 0.0f,    0.0f, -1.0f, 0.0f,     0.0f, -1.0f, 1.0f,     24); //bottom right Y frontVIEW backSIDE ()
+    drawQuad(1.0f, 1.0f, 1.0f,      0.0f, 1.0f, 1.0f,    0.0f, 1.0f, 0.0f,     1.0f, 1.0f, 0.0f,    24); //bottom right Y backVIEW frontSIDE (y)
+    drawQuad(-1.0f, -1.0f, 1.0f,      0.0f, -1.0f, 1.0f,    0.0f, -1.0f, 0.0f,     -1.0f, -1.0f, 0.0f,    24); //bottom left Y frontVIEW backSIDE ()
+    drawQuad(-1.0f, 1.0f, 1.0f,      -1.0f, 1.0f, 0.0f,    0.0f, 1.0f, 0.0f,     0.0f, 1.0f, 1.0f,    24); //bottom left Y backVIEW frontSIDE (y)
+    
+    drawQuad(1.0f, 1.0f, -1.0f,       0.0f, 1.0f, -1.0,     0.0f, 0.0f, -1.0,      1.0f, 0.0f, -1.0,    24); //top right Z frontVIEW backSIDE ()
+    drawQuad(1.0f, 1.0f, 1.0f,       1.0f, 0.0f, 1.0f,     0.0f, 0.0f, 1.0f,      0.0f, 1.0f, 1.0f,    24); //top right Z backVIEW frontSIDE (z)
+    drawQuad(-1.0f, 1.0f, -1.0f,      -1.0f, 0.0f, -1.0f,     0.0f, 0.0f, -1.0f,      0.0f, 1.0f, -1.0f,    24); //top left Z frontVIEW backSIDE ()
+    drawQuad(-1.0f, 1.0f, 1.0f,      0.0f, 1.0f, 1.0f,     0.0f, 0.0f, 1.0f,      -1.0f, 0.0f, 1.0f,    24); //top left Z backVIEW frontSIDE (z)
+    drawQuad(1.0f, -1.0f, -1.0f,      1.0f, 0.0f, -1.0f,     0.0f, 0.0f, -1.0f,       0.0f, -1.0f, -1.0f,    24); //bottom right Z frontVIEW backSIDE ()
+    drawQuad(1.0f, -1.0f, 1.0f,      0.0f, -1.0f, 1.0f,     0.0f, 0.0f, 1.0f,       1.0f, 0.0f, 1.0f,    24); //bottom right Z backVIEW frontSIDE (z)
+    drawQuad(-1.0f, -1.0f, -1.0f,      0.0f, -1.0f, -1.0f,     0.0f, 0.0f, -1.0f,      -1.0f, 0.0f, -1.0f,    24); //bottom left Z frontVIEW backSIDE ()
+    drawQuad(-1.0f, -1.0f, 1.0f,      -1.0f, 0.0f, 1.0f,     0.0f, 0.0f, 1.0f,      0.0f, -1.0f, 1.0f,    24); //bottom left Z backVIEW frontSIDE (z)
+    
 }
 
 void drawAxes(void) {
@@ -591,13 +714,13 @@ void display(void) {
 
 void specialKeys(int key, int x, int y) {
     if (key == GLUT_KEY_UP) {
-        angleX -= 5.0f;
+        angleX -= 2.5f;
     } else if (key == GLUT_KEY_DOWN) {
-        angleX += 5.0f;
+        angleX += 2.5f;
     } else if (key == GLUT_KEY_RIGHT) {
-        angleY += 5.0f;
+        angleY += 2.5f;
     } else if (key == GLUT_KEY_LEFT) {
-        angleY -= 5.0f;
+        angleY -= 2.5f;
     }
     glutPostRedisplay();
 }
