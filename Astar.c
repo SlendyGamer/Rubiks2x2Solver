@@ -26,7 +26,7 @@ static inline unsigned long long state_key(const No *s){
     //função hash, pra misturar bytes eproduzir numeros 64-bit
 
     for (size_t i = 0; i < n; ++i){
-        h ^= p[i];
+        h ^= p[i]; // faz um XOR com o byte atual
         h *= 1099511628211ULL; //um primo especifico para misturar                     // FNV-1a prime
     }
     return h;
@@ -131,33 +131,33 @@ static void hp_free(MinHeap *h){
 typedef struct { unsigned long long key; int g; int used; } VisEnt;//o tab vai ter uma key,used(livre ou ocupado) e g(melhor custo)
 typedef struct { VisEnt *tab; size_t cap; } Visited;// tab é o nosso vetor
 
-static Visited* vis_new(size_t cap_pow2){
-    size_t cap=1; while(cap<cap_pow2) cap<<=1;
-    Visited* V = (Visited*)calloc(1,sizeof(*V));
+static Visited* vis_new(size_t cap_pow2){ //cria a tabela de estados visitados
+    size_t cap=1; while(cap<cap_pow2) cap<<=1; // ajusta capacidade para potência de 2
+    Visited* V = (Visited*)calloc(1,sizeof(*V)); //aloca a estrutura em si
     V->cap = cap;
-    V->tab = (VisEnt*)calloc(cap,sizeof(VisEnt));
+    V->tab = (VisEnt*)calloc(cap,sizeof(VisEnt)); //aloca o vetor interno, ja vem zerado
     return V;
 }
 static inline size_t vis_idx(const Visited* V, unsigned long long k){
     return (size_t)(k & (V->cap - 1));
-}
+}// calcula qual posicao da tabela de visitados o vetor(tab) deve ir, a partir do hash k
 static int vis_get(const Visited* V, unsigned long long k, int* out_g){
-    size_t i = vis_idx(V,k), start=i;
-    for(;;){
-        if(!V->tab[i].used) return 0;
-        if(V->tab[i].key==k){ if(out_g) *out_g=V->tab[i].g; return 1; }
-        i=(i+1)&(V->cap-1); if(i==start) return 0;
+    size_t i = vis_idx(V,k), start=i;//verifica se o estado ja foi armazenado e se sim, devolve o melhor custo g
+    for(;;){//loop infinito, so sai com o return
+        if(!V->tab[i].used) return 0;//slot vazio, a chave nunca foi inserida
+        if(V->tab[i].key==k){ if(out_g) *out_g=V->tab[i].g; return 1; }//achou a chave, se o slot contem a mesma chave, ele achou o estado. Verifica o ponteiro out_g, se n for nulo, copia o custo g e retorna 1
+        i=(i+1)&(V->cap-1); if(i==start) return 0; //se o slot estiver ocupado com outra chave ele avanca para o proximo indice.
+    }// se voltou ao ponto inicial, significa que a tabela inteira foi verificada e a chave nao existe, retornar 0
+}
+static void vis_put_min(Visited* V, unsigned long long k, int g){ //insere ou atualiza estados na tabela de visitados
+    size_t i = vis_idx(V,k), start=i;// guarda start para saber quando deu a volta completa
+    for(;;){// loop infinito, so sai com return
+        if(!V->tab[i].used){ V->tab[i].used=1; V->tab[i].key=k; V->tab[i].g=g; return; }//verifica se slot esta vazio, insere a nova entrada
+        if(V->tab[i].key==k){ if(g < V->tab[i].g) V->tab[i].g=g; return; }//verifica se a chave ja existe, se existir, ele compara o novo custo g com o que estava salvo e se for menor, atualiza
+        i=(i+1)&(V->cap-1); if(i==start){ /* cheio: ignorado p/ simplicidade */ return; }// se o slot estiver ocupado ele segue para o prox indice, se deu a volta na funcao desiste.
     }
 }
-static void vis_put_min(Visited* V, unsigned long long k, int g){
-    size_t i = vis_idx(V,k), start=i;
-    for(;;){
-        if(!V->tab[i].used){ V->tab[i].used=1; V->tab[i].key=k; V->tab[i].g=g; return; }
-        if(V->tab[i].key==k){ if(g < V->tab[i].g) V->tab[i].g=g; return; }
-        i=(i+1)&(V->cap-1); if(i==start){ /* cheio: ignorado p/ simplicidade */ return; }
-    }
-}
-static void vis_free(Visited* V){ free(V->tab); free(V); }
+static void vis_free(Visited* V){ free(V->tab); free(V); }// libera a memoria alocada
 
 
 
