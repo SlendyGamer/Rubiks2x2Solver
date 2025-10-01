@@ -16,6 +16,9 @@ void animateRotation(int value);
 //    int pattern[24]; // Array de 0 a 23 mapeando quads para cores
 //} No; // Não utilizada diretamente
 
+static const strat DFS = { (void* (*)(void))CriaPilha, (void (*)(void*, No*))push,       (No* (*)(void*))pop,        (int (*)(void*))vaziaPilha, (void (*)(void*, Pilha*))preparePathPilha};
+static const strat BFS = { (void* (*)(void))CriaFila,  (void (*)(void*, No*))InsereFila, (No* (*)(void*))RetiraFila, (int (*)(void*))VaziaFila,  (void (*)(void*, Pilha*))preparePathFila};
+
 Pilha* path = NULL;
 
 float colors[25][3] = {
@@ -672,7 +675,7 @@ void keyboard(unsigned char key, int x, int y) {
             memcpy(state->pattern, quadValues, 24 * sizeof(int));
             Pilha* p = CriaPilha();
             path = CriaPilha();
-            if (dfs(p, state, solution, path))
+            if (search(p, state, solution, path, DFS))
             {
                 printf("sucesso\n");
             }
@@ -683,7 +686,7 @@ void keyboard(unsigned char key, int x, int y) {
             memcpy(state->pattern, quadValues, 24 * sizeof(int));
             Fila* f = CriaFila();
             path = CriaPilha();
-            if (bfs(f, state, solution, path))
+            if (search(f, state, solution, path, BFS))
             {
                 printf("sucesso\n");
             }

@@ -1,6 +1,8 @@
 #ifndef NO_H
 #define NO_H
 
+typedef struct pilha Pilha;
+
 typedef struct no
 {
     int pattern[24];
@@ -17,4 +19,18 @@ typedef struct no
     struct no *prox;
 }No;
 
+typedef struct search_strategy
+{
+    void* (*criaStruct)(void);
+    void (*insereStruct)(void* dataStruct, No* state); //insere na estrutura
+    No* (*retiraStruct)(void* dataStruct); //retira da estrutura
+    int (*vaziaStruct)(void* dataStruct); //funcao checa se estrutura esta vazia
+    void (*preparePathStruct)(void* datastruct, Pilha* path); //prepara o path final para o openGl resolver
+}strat;
+
+
+/*farei isso na main:
+strat dfs = {void push, no* pop, void sucessora, int vaziaPilha }
+strat bfs = {void insereFila, no* retiraFila, void sucessoraBFS, int vaziaFila }
+*/
 #endif

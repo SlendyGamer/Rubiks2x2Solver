@@ -462,7 +462,6 @@ int bfs(Fila *f, No* state, int solution[], Pilha *path)
     while(!VaziaFila(f))
     {
         state = RetiraFila(f);
-        //printf("rotation: %c\n",state->rotation);
         InsereFila(fFinal, state);
 
         if(memcmp(state->pattern, solution, 24 * sizeof(int)) == 0)
@@ -492,6 +491,147 @@ int bfs(Fila *f, No* state, int solution[], Pilha *path)
                 sucessoraBFS(f, state, 'x'); //soma cx em 1
             if (state->cNx < 1 && state->cx == 0)
                 sucessoraBFS(f, state, 'X');
+        }
+        //nao preciso de moves--; em else aqui
+    }
+    return 0;
+}
+
+void sucessor(void* f, No* state, char dir, strat ds)
+{
+    No* auxNo = malloc(sizeof(No));
+    memcpy(auxNo, state, sizeof(No));
+    switch(dir)
+    {
+        case 'x':
+            auxNo->cx++;
+            auxNo->cNx = 0;
+            auxNo->cy = 0;
+            auxNo->cNy = 0;
+            auxNo->cz = 0;
+            auxNo->cNz = 0;
+            auxNo->rotation = 'x';
+            auxNo->pai = state;
+            auxNo->moves = state->moves + 1;
+            auxNo = rotate_xX(auxNo);
+            ds.insereStruct(f, auxNo);
+            break;
+        case 'X': //X'
+            auxNo->cx = 0;
+            auxNo->cNx++;
+            auxNo->cy = 0;
+            auxNo->cNy = 0;
+            auxNo->cz = 0;
+            auxNo->cNz = 0;
+            auxNo->rotation = 'X';
+            auxNo->pai = state;
+            auxNo->moves = state->moves + 1;
+            auxNo = rotate_NOTxX(auxNo);
+            ds.insereStruct(f, auxNo);
+            break;
+        case 'y':
+            auxNo->cx = 0;
+            auxNo->cNx = 0;
+            auxNo->cy++;
+            auxNo->cNy = 0;
+            auxNo->cz = 0;
+            auxNo->cNz = 0;
+            auxNo->rotation = 'y';
+            auxNo->pai = state;
+            auxNo->moves = state->moves + 1;
+            auxNo = rotate_yY(auxNo);
+            ds.insereStruct(f, auxNo);
+            break;
+        case 'Y': //Y'
+            auxNo->cx = 0;
+            auxNo->cNx = 0;
+            auxNo->cy = 0;
+            auxNo->cNy++;
+            auxNo->cz = 0;
+            auxNo->cNz = 0;
+            auxNo->rotation = 'Y';
+            auxNo->pai = state;
+            auxNo->moves = state->moves + 1;
+            auxNo = rotate_NOTyY(auxNo);
+            ds.insereStruct(f, auxNo);
+            break;
+        case 'z':
+            auxNo->cx = 0;
+            auxNo->cNx = 0;
+            auxNo->cy = 0;
+            auxNo->cNy = 0;
+            auxNo->cz++;
+            auxNo->cNz = 0;
+            auxNo->rotation = 'z';
+            auxNo->pai = state;
+            auxNo->moves = state->moves + 1;
+            auxNo = rotate_zZ(auxNo);
+            ds.insereStruct(f, auxNo);
+            break;
+        case 'Z': //Z'
+            auxNo->cx = 0;
+            auxNo->cNx = 0;
+            auxNo->cy = 0;
+            auxNo->cNy = 0;
+            auxNo->cz = 0;
+            auxNo->cNz++;
+            auxNo->rotation = 'Z';
+            auxNo->pai = state;
+            auxNo->moves = state->moves + 1;
+            auxNo = rotate_NOTzZ(auxNo);
+            ds.insereStruct(f, auxNo);
+            break;
+        default:
+            perror("variavel dir deve ser 'x/X', 'y/Y' ou 'z/Z'");
+            exit(2);
+    }
+}
+
+int search(void* f, No* state, int solution[], Pilha *path, strat ds)
+{
+    void* fFinal = ds.criaStruct();
+    state->pai = NULL;
+    state->cx = 0;
+    state->cy = 0;
+    state->cz = 0;
+    state->moves = 0;
+    state->rotation = '-';
+    state->pai = NULL;
+    state->prox = NULL;
+    print_open(state->pattern);
+    ds.insereStruct(f, state);
+    while(!ds.vaziaStruct(f))
+    {
+        state = ds.retiraStruct(f);
+        ds.insereStruct(fFinal, state);
+
+        if(memcmp(state->pattern, solution, 24 * sizeof(int)) == 0)
+        {
+           //printa moves
+           printf("sucesso com %d moves\n", state->moves);
+           print_open(state->pattern);
+           ds.preparePathStruct(fFinal, path);
+           imprimePilha(path);
+           //imprimeFila(fFinal);
+           return 1;
+        }
+
+        if (state->moves < 14)
+        {
+            if (state->cz < 2 && state->cNz == 0)
+                sucessor(f, state, 'z', ds);
+            if (state->cNz < 1 && state->cz == 0)
+                sucessor(f, state, 'Z', ds);
+
+            if (state->cy < 2 && state->cNy == 0)
+                sucessor(f, state, 'y', ds);
+            if (state->cNy < 1 && state->cy == 0)
+                sucessor(f, state, 'Y', ds);
+
+            if (state->cx < 2 && state->cNx == 0)
+                sucessor(f, state, 'x', ds); //soma cx em 1
+            if (state->cNx < 1 && state->cx == 0)
+                sucessor(f, state, 'X', ds);
         }
         //nao preciso de moves--; em else aqui
     }
