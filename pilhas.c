@@ -66,7 +66,7 @@ No* pop (Pilha* p)
 }
 
 // libera toda a pilha
-Pilha * libera (Pilha* p)
+void libera (Pilha* p)
 {
     No *q = p->Topo;
     while (q != NULL)
@@ -76,7 +76,6 @@ Pilha * libera (Pilha* p)
         q = t;
     }
     free(p);
-    return NULL;
 }
 
 // imprime rotações subindo pela cadeia de pais (para mostrar caminho)
