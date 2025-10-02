@@ -1,25 +1,32 @@
 #ifndef PILHAS_H_INCLUDED
 #define PILHAS_H_INCLUDED
 
-/* FUN��ES DE MANIPULA��O DE PILHA
+#include "no.h"   // usa a definição única de No
 
-Pilha* CriaPilha ()     CRIA A PILHA
+// ===== Estruturas =====
+typedef struct pilha {
+  No* Topo;
+} Pilha;
 
-No* ins_ini (No* t, int a)  AUXILIAR DA INSER��O
+// ===== Operações =====
 
-void push (Pilha* p, int v) INSER��O
+// cria pilha vazia
+Pilha* CriaPilha(void);
 
-No* ret_ini (No* l)         AUXILIAR DA REMO��O
+// insere estado no topo (não faz cópia do No*, empilha o ponteiro)
+void push(Pilha* p, No* state);
 
-int pop (Pilha* p)          REMOVE RETORNANDO O VALOR QUE FOI REMOVIDO
+// remove e retorna o topo (retorna o próprio No* empilhado; quem chama decide dar free)
+No* pop(Pilha* p);
 
-void libera (Pilha* p)      LIBERA A PILHA
+// verifica se a pilha está vazia (1 se vazia, 0 se não)
+int vaziaPilha(Pilha* p);
 
-void imprime (Pilha* p)     IMPRIMA A PILHA
+// imprime rotações ou caminho (implementação livre)
+void imprimePilha(Pilha* p);
 
-int vaziaPilha(Pilha *p)	    VERIFICA SE A PILHA EST� VAZIA, RETORNA 1
-
-*/
+// imprime versão antiga (se não usar, pode ser stub)
+void imprimePilhaOld(Pilha* p);
 
 
 
