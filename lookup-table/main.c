@@ -1,6 +1,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
+#include "no.h"
+#include "FILA.h"
+#include "pilhas.h"
+#include "actions.h"
 
 #define CORNERS 7
 #define TILES 24
@@ -13,20 +18,79 @@ int rank_orientation(int *orientation);
 int factorial(int n);
 void print_array(int *arr, int n);
 int** create_table();
+int process_24array(int *in_array, int orientation_rank_ceil);
+void process_index_to_24_array(int* array24, int orientation_rank_ceil, int index);
+void unrank_position(int rank, int *position);
+void unrank_orientation(int rank, int *orientation);
+void insert(int index, int value, int **table);
+int access(int index, int **table);
 
 int main() {
 
     int i;
-
-    int orientation_rank_ceil = pow(3, CORNERS);
-
     int** table = create_table();
+    Fila *f_states = CriaFila();
+    int correct_state[24] = {
+        18, 17, 4, 1,        // Front face (4 quads)
+        12, 21, 9, 6,        // Back face
+        22, 20, 8, 5,        // Left face
+        15, 14, 0, 10,       // Right face
+        3, 2, 7, 11,         // Top face
+        23, 13, 19, 16       // Bottom face
+    };
+    No* state = malloc(sizeof(No));
+
+    memcpy(state->pattern, correct_state, 24 * sizeof(int));
+    state->pai = NULL;
+    state->cx = 0;
+    state->cy = 0;
+    state->cz = 0;
+    state->cNx = 0;
+    state->cNy = 0;
+    state->cNz = 0;
+    state->moves = 0;
+    state->rotation = '-';
+    state->pai = NULL;
+    state->prox = NULL;
+
+    InsereFila(f_states, state);
+
+    int index;
+    int orientation_rank_ceil = pow(3, CORNERS);
+    int conteiro = 0;
 
     // loop para chamar para cada estado no bfs
-    for(i = 0; i < BLOCK_SIZE; i++) {
-
+    while(!VaziaFila(f_states))
+    {
+        state = RetiraFila(f_states);
+        index = process_24array(state->pattern, orientation_rank_ceil);
         
+        if(access(index, table) == -1) {
+            insert(index, state->moves, table);
+            printf("%d\n", conteiro);
+            conteiro++;
+
+            if (state->cz < 2 && state->cNz == 0)
+                sucessoraBFS(f_states, state, 'z');
+            if (state->cNz < 1 && state->cz == 0)
+                sucessoraBFS(f_states, state, 'Z');
+
+            if (state->cy < 2 && state->cNy == 0)
+                sucessoraBFS(f_states, state, 'y');
+            if (state->cNy < 1 && state->cy == 0)
+                sucessoraBFS(f_states, state, 'Y');
+
+            if (state->cx < 2 && state->cNx == 0)
+                sucessoraBFS(f_states, state, 'x');
+            if (state->cNx < 1 && state->cx == 0)
+                sucessoraBFS(f_states, state, 'X');
+        }
     }
+
+    // for(i = 0; i < TOTAL_STATES / BLOCK_SIZE; i++) {
+    //     printf("----- %04d -----\n", i);
+    //     print_array(table[i], BLOCK_SIZE);
+    // }
 
     FILE *f = fopen(FILE_NAME, "wb");
     if (!f) {
@@ -40,6 +104,54 @@ int main() {
 
     fclose(f);
 }
+
+// void process_index_to_24_array(int* array24, int orientation_rank_ceil, int index) {
+
+//     char sample_orientation[] = {
+//         'z', 'z', 'z',
+//         'z', 'z', 'z',
+//         'z', 'z', 'x',
+//         'x', 'x', 'x',
+//         'x', 'x', 'x',
+//         'x', 'y', 'y',
+//         'y', 'y', 'y',
+//         'y', 'y', 'y'
+//     };
+    
+//     int position_rank = index / orientation_rank_ceil;
+//     int orientation_rank = index % orientation_rank_ceil;
+
+//     int temp_position[CORNERS];
+//     int temp_orientation[CORNERS];
+
+//     unrank_position(position_rank, temp_position);
+//     unrank_orientation(orientation_rank, temp_orientation);
+
+//         int base_corners[CORNERS][3] = {
+//         {12, 13, 14}, {15, 16, 17}, {18, 19, 20},
+//         {3, 4, 5}, {6, 7, 8}, {9, 10, 11}, {0, 1, 2}
+//     };
+
+//     int corners[CORNERS][3];
+
+//     // for(i = 0; i < CORNERS; i++) {
+//     //     corners[i] = base_corners[temp_position[i]];
+//     //     for(j = 0; j < CORNERS; j++) {
+//     //         switch(corners[i][j]) {
+//     //             case 12: 
+//     //                 switch()
+//     //             case 15: 
+//     //             case 18: 
+//     //             case 0: 
+//     //             case 3: 
+//     //             case 6: 
+//     //             case 9: 
+//     //         }
+//     //     }
+//     // }
+
+
+// }
 
 int process_24array(int *in_array, int orientation_rank_ceil) {
     int i, j;
@@ -67,18 +179,6 @@ int process_24array(int *in_array, int orientation_rank_ceil) {
     // CORNER 5: 9
     // CORNER 6: 0
 
-    // // referencia de valores: serve para entender qual corner esta em cada position (qual o valor de cada elemento no array temp_position)
-    // int sample_arr[] = {
-    //     1, 2, 3,
-    //     4, 5, 6,
-    //     7, 8, 9,
-    //     10, 11, 12,
-    //     13, 14, 15,
-    //     16, 17, 18,
-    //     19, 20, 21,
-    //     22, 23, 24
-    // };
-
     // Referencia 3: qual a orientacao de cada indice do vetor de 24 inteiros
 
     // referencia de orientacoes: serve para entender qual a orientacao de cada posicao de sticker (eixo x, y ou z) - apenas para os 7 corners
@@ -101,12 +201,15 @@ int process_24array(int *in_array, int orientation_rank_ceil) {
         {in_array[16], in_array[2], in_array[11]},    // POSITION 3
         {in_array[7], in_array[18], in_array[10]},    // POSITION 4
         {in_array[6], in_array[15], in_array[19]},    // POSITION 5
-        {in_array[14], in_array[3], in_array[5]}      // POSITION 6
+        {in_array[14], in_array[3], in_array[17]}     // POSITION 6
     };
 
     int temp_position[CORNERS];
     int temp_orientation[CORNERS];
 
+    // obtem vetores de posicao e orientacao
+    // indice no de posicao representa POSITION, enquanto valor representa CORNER
+    // indice no de orientacao representa a equivalencia a CORNER no mesmo indice do vetor de posicao e valor representa orientacao
     for(i = 0; i < CORNERS; i++) {
         for(j = 0; j < 3; j++) {
             switch(corner_mat[i][j]) {
@@ -121,8 +224,8 @@ int process_24array(int *in_array, int orientation_rank_ceil) {
         }
     }
 
-    print_array(temp_position, CORNERS);
-    print_array(temp_orientation, CORNERS);
+    // print_array(temp_position, CORNERS);
+    // print_array(temp_orientation, CORNERS);
 
     // obtem a classificacao da posicao
     int position_rank = rank_position(temp_position);
@@ -132,6 +235,28 @@ int process_24array(int *in_array, int orientation_rank_ceil) {
 
     // obtem o int final
     return position_rank * orientation_rank_ceil + orientation_rank;
+}
+
+void unrank_position(int rank, int *position) {
+    int i, j;
+    int fact, idx;
+    int available[CORNERS];
+
+    for (i = 0; i < CORNERS; i++) {
+        available[i] = i;
+    }
+
+    for (i = 0; i < CORNERS; i++) {
+        fact = factorial(CORNERS - i - 1);
+        idx = rank / fact;
+        rank = rank % fact;
+
+        position[i] = available[idx];
+
+        for (j = idx; j < CORNERS - i - 1; j++) {
+            available[j] = available[j + 1];
+        }
+    }
 }
 
 int rank_position(int *position) {
@@ -151,6 +276,14 @@ int rank_position(int *position) {
     return rank;
 }
 
+void unrank_orientation(int rank, int *orientation) {
+    int i;
+    for (i = 0; i < CORNERS; i++) {
+        orientation[i] = rank / (int)pow(3, CORNERS - i - 1);
+        rank %= (int)pow(3, CORNERS - i - 1);
+    }
+}
+
 int rank_orientation(int *orientation) {
     int i, rank = 0;
     
@@ -163,10 +296,9 @@ int rank_orientation(int *orientation) {
 
 int factorial(int n) {
     int i, result = 1;
-    for(i = 2; i < n; i++) {
+    for(i = 2; i <= n; i++) {
         result *= i;
     }
-
     return result;
 }
 
@@ -196,6 +328,7 @@ int** load_table() {
         }
     }
 
+    return table;
 }
 
 int** create_table() {
@@ -206,6 +339,7 @@ int** create_table() {
     // aloca cada um dos sub-arrys
     for(i = 0; i < TOTAL_STATES / BLOCK_SIZE; i++) {
         main_array[i] = (int*)malloc(BLOCK_SIZE * sizeof(int));
+        memset(main_array[i], 0xFF, BLOCK_SIZE * sizeof(int)); // inicializados como -1
     }
 
     return main_array;
@@ -229,4 +363,8 @@ int access(int index, int **table) {
 int get_cost(int* array, int **table) {
     int orientation_rank_ceil = pow(3, CORNERS);
     return access(process_24array(array, orientation_rank_ceil), table);
+}
+
+void insert(int index, int value, int **table) {
+    table[index / BLOCK_SIZE][index % BLOCK_SIZE] = value;
 }
