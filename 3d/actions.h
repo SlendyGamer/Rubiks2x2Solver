@@ -5,7 +5,7 @@
 
 No* rotate_xX(No* state) //ok
 {
-    int aux;
+    char aux;
     // Ciclo 1: 1 → 16 → 12 → 11 → 1
     aux = state->pattern[3];
     state->pattern[3] = state->pattern[19];
@@ -33,7 +33,7 @@ No* rotate_xX(No* state) //ok
 No* rotate_NOTxX(No* state) //ok
 {
     // Ciclo 1: 1 → 16 → 12 → 11 → 1
-    int aux = state->pattern[3];
+    char aux = state->pattern[3];
     state->pattern[3] = state->pattern[23];
     state->pattern[23] = state->pattern[4];
     state->pattern[4] = state->pattern[19];
@@ -58,7 +58,7 @@ No* rotate_NOTxX(No* state) //ok
 
 No* rotate_yY(No* state) //ok
 {
-    int aux;
+    char aux;
     // Ciclo 1: 0 → 9 → 8 → 4 → 0
     aux = state->pattern[14];
     state->pattern[14] = state->pattern[2];
@@ -85,7 +85,7 @@ No* rotate_yY(No* state) //ok
 
 No* rotate_NOTyY(No* state) //ok
 {
-    int aux;
+    char aux;
     // Ciclo 1: 0 → 9 → 8 → 4 → 0
     aux = state->pattern[14];
     state->pattern[14] = state->pattern[6];
@@ -112,7 +112,7 @@ No* rotate_NOTyY(No* state) //ok
 
 No* rotate_zZ(No* state) //ok
 {
-    int aux;
+    char aux;
     // Ciclo 1: 5 → 19 → 15 → 2 → 5
     aux = state->pattern[11];
     state->pattern[11] = state->pattern[17];
@@ -139,7 +139,7 @@ No* rotate_zZ(No* state) //ok
 
 No* rotate_NOTzZ(No* state) //ok
 {
-    int aux;
+    char aux;
     // Ciclo 1: 5 → 19 → 15 → 2 → 5
     aux = state->pattern[11];
     state->pattern[11] = state->pattern[22];
@@ -164,7 +164,7 @@ No* rotate_NOTzZ(No* state) //ok
     return state;
 }
 
-void print_open(int cube[])
+void print_open(char cube[])
 {
 printf("        %2d %2d\n"
        "        %2d %2d\n"
@@ -587,7 +587,7 @@ void sucessor(void* f, No* state, char dir, strat ds)
     }
 }
 
-int search(void* f, No* state, int solution[], Pilha *path, strat ds)
+int search(void* f, No* state, char solution[], Pilha *path, strat ds)
 {
     int total_explored = 0;
     int total_visited = 0;
@@ -608,7 +608,7 @@ int search(void* f, No* state, int solution[], Pilha *path, strat ds)
         total_visited++;
         ds.insereStruct(fFinal, state);
 
-        if(memcmp(state->pattern, solution, 24 * sizeof(int)) == 0)
+        if(memcmp(state->pattern, solution, 24 * sizeof(char)) == 0)
         {
            //printa moves
            printf("sucesso com %d moves\n", state->moves);

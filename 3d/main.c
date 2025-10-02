@@ -51,7 +51,7 @@ float colors[25][3] = {
 };
 
 // Array global que mapeia cada quad a um índice de cor
-int quadValues[24] = {
+char quadValues[24] = {
     18, 17, 4, 1,        // Front face (4 quads)
     12, 21, 9, 6,        // Back face
     22, 20, 8, 5,        // Left face
@@ -60,7 +60,7 @@ int quadValues[24] = {
     23, 13, 19, 16       // Bottom face
 };
 
-int solution[24] = {
+char solution[24] = {
     18, 17, 4, 1,        // Front face (4 quads)
     12, 21, 9, 6,        // Back face
     22, 20, 8, 5,        // Left face
@@ -83,7 +83,7 @@ void init(void) {
     glFrontFace(GL_CCW);
 }
 
-void drawQuad(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4, float z4, int value) {
+void drawQuad(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4, float z4, char value) {
     glColor3fv(colors[value]);
     glBegin(GL_QUADS);
     glVertex3f(x1, y1, z1);
@@ -455,7 +455,7 @@ void drawAxes(void) {
 }
 
 void rotate_x(void) {
-    int aux;
+    char aux;
     // Ciclo 1: 1 → 16 → 12 → 11 → 1
     aux = quadValues[3];
     quadValues[3] = quadValues[19];
@@ -480,7 +480,7 @@ void rotate_x(void) {
 
 void rotate_NOTx(void) //ok
 {
-    int aux = quadValues[3];
+    char aux = quadValues[3];
     quadValues[3] = quadValues[23];
     quadValues[23] = quadValues[4];
     quadValues[4] = quadValues[19];
@@ -502,7 +502,7 @@ void rotate_NOTx(void) //ok
 }
 
 void rotate_y(void) {
-    int aux;
+    char aux;
     // Ciclo 1: 0 → 9 → 8 → 4 → 0
     aux = quadValues[14];
     quadValues[14] = quadValues[2];
@@ -527,7 +527,7 @@ void rotate_y(void) {
 
 void rotate_NOTy(void) //ok
 {
-    int aux;
+    char aux;
     // Ciclo 1: 0 → 9 → 8 → 4 → 0
     aux = quadValues[14];
     quadValues[14] = quadValues[6];
@@ -551,7 +551,7 @@ void rotate_NOTy(void) //ok
 }
 
 void rotate_z(void) {
-    int aux;
+    char aux;
     // Ciclo 1: 5 → 19 → 15 → 2 → 5
     aux = quadValues[11];
     quadValues[11] = quadValues[17];
@@ -576,7 +576,7 @@ void rotate_z(void) {
 
 void rotate_NOTz(void)
 {
-    int aux;
+    char aux;
     // Ciclo 1: 5 → 19 → 15 → 2 → 5
     aux = quadValues[11];
     quadValues[11] = quadValues[22];
@@ -673,7 +673,7 @@ void keyboard(unsigned char key, int x, int y) {
         } else if (key == 'd' || key == 'D') {
             if (path) libera(path);
             No* state = (No*)malloc(sizeof(No));
-            memcpy(state->pattern, quadValues, 24 * sizeof(int));
+            memcpy(state->pattern, quadValues, 24 * sizeof(char));
             Pilha* p = CriaPilha();
             path = CriaPilha();
             if (search(p, state, solution, path, DFS))
@@ -685,7 +685,7 @@ void keyboard(unsigned char key, int x, int y) {
         } else if (key == 'b' || key == 'B') {
             if (path) libera(path);
             No* state = (No*)malloc(sizeof(No));
-            memcpy(state->pattern, quadValues, 24 * sizeof(int));
+            memcpy(state->pattern, quadValues, 24 * sizeof(char));
             Fila* f = CriaFila();
             path = CriaPilha();
             if (search(f, state, solution, path, BFS))

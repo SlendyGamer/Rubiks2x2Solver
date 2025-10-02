@@ -5,7 +5,7 @@ typedef struct pilha Pilha;
 
 typedef struct no
 {
-    int pattern[24];
+    char pattern[24];
     int cx;
     int cNx;
     int cy;
