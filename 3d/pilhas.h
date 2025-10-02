@@ -104,20 +104,6 @@ void imprimePilha(Pilha *p)
 {
     No* q = malloc(sizeof(No));
     q = p->Topo;
-    /*
-    if(!p)
-    {
-        printf("\n\n\tPILHA VAZIA!!!!\n\n");
-    }
-    else
-    {
-        printf("\n\n\tImpress�o da Pilha: ");
-        for (q=p->Topo; q!=NULL; q=q->prox)
-        {
-            printf(" %c",q->rotation);
-        }
-        printf("\n\n");
-    }*/
     int i = 0;
 while(q != NULL){
         i++;
@@ -156,6 +142,19 @@ void preparePathPilha(Pilha* p, Pilha* path)
         push(path, copia);
     }
 }
+
+void preparePathFromHeap(Node *goal, Pilha *path) {
+    for (Node *n = goal; n && n->move != '-'; n = n->parent) {
+        No *copia = malloc(sizeof(No));
+        memset(copia, 0, sizeof(No));
+
+        copia->rotation = n->move;                           // movimento
+        memcpy(copia->pattern, n->state, 24 * sizeof(char)); // estado do cubo
+
+        push(path, copia);
+    }
+}
+
 
                     
 

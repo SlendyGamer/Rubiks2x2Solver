@@ -688,6 +688,14 @@ void keyboard(unsigned char key, int x, int y) {
                 printf("sucesso\n");
             }
             liberaFila(f);
+            if (state) printf("pingusso\n");                        //TODO: remover------------------------------
+        } else if(key == 'a' || key == 'A') {
+            if (path) libera(path);
+            No* state = (No*)malloc(sizeof(No));
+            if (A_star(state, solution, 14))
+            {
+                printf("sucesso\n");
+            }
         } else if(key == 's' || key == 'S') {
             if(path != NULL && !vaziaPilha(path) && rotationAngle == 0.0f)
             {

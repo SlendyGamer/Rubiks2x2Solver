@@ -17,4 +17,15 @@ typedef struct no
     struct no *prox;
 }No;
 
+//vai gurardr todas as informações que vamos usar para fazer a estrela
+typedef struct Node {
+    No                *state;    // estado do cubo, pelo menos copia ele(clona ele)
+    int                g;        // custo já percorrido (QTM)
+    int                h;        // a heurística 
+    int                f;        // f = g + h
+    unsigned long long key;      //a key que vamos criar para cada posição do vetor patterns
+    struct Node       *parent;   // para reconstruir solução
+    char               move;     //movimento que gerou este nó
+} Node;
+
 #endif
