@@ -5,7 +5,7 @@
 
 No* rotate_xX(No* state) //ok
 {
-    int aux;
+    char aux;
     // Ciclo 1: 1 → 16 → 12 → 11 → 1
     aux = state->pattern[3];
     state->pattern[3] = state->pattern[19];
@@ -33,7 +33,7 @@ No* rotate_xX(No* state) //ok
 No* rotate_NOTxX(No* state) //ok
 {
     // Ciclo 1: 1 → 16 → 12 → 11 → 1
-    int aux = state->pattern[3];
+    char aux = state->pattern[3];
     state->pattern[3] = state->pattern[23];
     state->pattern[23] = state->pattern[4];
     state->pattern[4] = state->pattern[19];
@@ -58,7 +58,7 @@ No* rotate_NOTxX(No* state) //ok
 
 No* rotate_yY(No* state) //ok
 {
-    int aux;
+    char aux;
     // Ciclo 1: 0 → 9 → 8 → 4 → 0
     aux = state->pattern[14];
     state->pattern[14] = state->pattern[2];
@@ -85,7 +85,7 @@ No* rotate_yY(No* state) //ok
 
 No* rotate_NOTyY(No* state) //ok
 {
-    int aux;
+    char aux;
     // Ciclo 1: 0 → 9 → 8 → 4 → 0
     aux = state->pattern[14];
     state->pattern[14] = state->pattern[6];
@@ -112,7 +112,7 @@ No* rotate_NOTyY(No* state) //ok
 
 No* rotate_zZ(No* state) //ok
 {
-    int aux;
+    char aux;
     // Ciclo 1: 5 → 19 → 15 → 2 → 5
     aux = state->pattern[11];
     state->pattern[11] = state->pattern[17];
@@ -139,7 +139,7 @@ No* rotate_zZ(No* state) //ok
 
 No* rotate_NOTzZ(No* state) //ok
 {
-    int aux;
+    char aux;
     // Ciclo 1: 5 → 19 → 15 → 2 → 5
     aux = state->pattern[11];
     state->pattern[11] = state->pattern[22];
@@ -164,7 +164,7 @@ No* rotate_NOTzZ(No* state) //ok
     return state;
 }
 
-void print_open(int cube[])
+void print_open(char cube[])
 {
 printf("        %2d %2d\n"
        "        %2d %2d\n"
@@ -462,7 +462,6 @@ int bfs(Fila *f, No* state, int solution[], Pilha *path)
     while(!VaziaFila(f))
     {
         state = RetiraFila(f);
-        //printf("rotation: %c\n",state->rotation);
         InsereFila(fFinal, state);
 
         if(memcmp(state->pattern, solution, 24 * sizeof(int)) == 0)
@@ -492,6 +491,169 @@ int bfs(Fila *f, No* state, int solution[], Pilha *path)
                 sucessoraBFS(f, state, 'x'); //soma cx em 1
             if (state->cNx < 1 && state->cx == 0)
                 sucessoraBFS(f, state, 'X');
+        }
+        //nao preciso de moves--; em else aqui
+    }
+    return 0;
+}
+
+void sucessor(void* f, No* state, char dir, strat ds)
+{
+    No* auxNo = malloc(sizeof(No));
+    memcpy(auxNo, state, sizeof(No));
+    switch(dir)
+    {
+        case 'x':
+            auxNo->cx++;
+            auxNo->cNx = 0;
+            auxNo->cy = 0;
+            auxNo->cNy = 0;
+            auxNo->cz = 0;
+            auxNo->cNz = 0;
+            auxNo->rotation = 'x';
+            auxNo->pai = state;
+            auxNo->moves = state->moves + 1;
+            auxNo = rotate_xX(auxNo);
+            ds.insereStruct(f, auxNo);
+            break;
+        case 'X': //X'
+            auxNo->cx = 0;
+            auxNo->cNx++;
+            auxNo->cy = 0;
+            auxNo->cNy = 0;
+            auxNo->cz = 0;
+            auxNo->cNz = 0;
+            auxNo->rotation = 'X';
+            auxNo->pai = state;
+            auxNo->moves = state->moves + 1;
+            auxNo = rotate_NOTxX(auxNo);
+            ds.insereStruct(f, auxNo);
+            break;
+        case 'y':
+            auxNo->cx = 0;
+            auxNo->cNx = 0;
+            auxNo->cy++;
+            auxNo->cNy = 0;
+            auxNo->cz = 0;
+            auxNo->cNz = 0;
+            auxNo->rotation = 'y';
+            auxNo->pai = state;
+            auxNo->moves = state->moves + 1;
+            auxNo = rotate_yY(auxNo);
+            ds.insereStruct(f, auxNo);
+            break;
+        case 'Y': //Y'
+            auxNo->cx = 0;
+            auxNo->cNx = 0;
+            auxNo->cy = 0;
+            auxNo->cNy++;
+            auxNo->cz = 0;
+            auxNo->cNz = 0;
+            auxNo->rotation = 'Y';
+            auxNo->pai = state;
+            auxNo->moves = state->moves + 1;
+            auxNo = rotate_NOTyY(auxNo);
+            ds.insereStruct(f, auxNo);
+            break;
+        case 'z':
+            auxNo->cx = 0;
+            auxNo->cNx = 0;
+            auxNo->cy = 0;
+            auxNo->cNy = 0;
+            auxNo->cz++;
+            auxNo->cNz = 0;
+            auxNo->rotation = 'z';
+            auxNo->pai = state;
+            auxNo->moves = state->moves + 1;
+            auxNo = rotate_zZ(auxNo);
+            ds.insereStruct(f, auxNo);
+            break;
+        case 'Z': //Z'
+            auxNo->cx = 0;
+            auxNo->cNx = 0;
+            auxNo->cy = 0;
+            auxNo->cNy = 0;
+            auxNo->cz = 0;
+            auxNo->cNz++;
+            auxNo->rotation = 'Z';
+            auxNo->pai = state;
+            auxNo->moves = state->moves + 1;
+            auxNo = rotate_NOTzZ(auxNo);
+            ds.insereStruct(f, auxNo);
+            break;
+        default:
+            perror("variavel dir deve ser 'x/X', 'y/Y' ou 'z/Z'");
+            exit(2);
+    }
+}
+
+int search(void* f, No* state, char solution[], Pilha *path, strat ds)
+{
+    int total_explored = 0;
+    int total_visited = 0;
+    void* fFinal = ds.criaStruct();
+    state->pai = NULL;
+    state->cx = 0;
+    state->cy = 0;
+    state->cz = 0;
+    state->moves = 0;
+    state->rotation = '-';
+    state->pai = NULL;
+    state->prox = NULL;
+    print_open(state->pattern);
+    ds.insereStruct(f, state);
+    while(!ds.vaziaStruct(f))
+    {
+        state = ds.retiraStruct(f);
+        total_visited++;
+        ds.insereStruct(fFinal, state);
+
+        if(memcmp(state->pattern, solution, 24 * sizeof(char)) == 0)
+        {
+           //printa moves
+           printf("sucesso com %d moves\n", state->moves);
+           print_open(state->pattern);
+           ds.preparePathStruct(fFinal, path);
+           imprimePilha(path);
+           printf("estados totais criados: %d\n", total_explored);
+           printf("estados totais visitados: %d\n", total_visited);
+           ds.liberaStruct(fFinal);
+           //imprimeFila(fFinal);
+           return 1;
+        }
+
+        if (state->moves < 14)
+        {
+            if (state->cz < 2 && state->cNz == 0)
+            {    
+                sucessor(f, state, 'z', ds);
+                total_explored++;
+            }
+            if (state->cNz < 1 && state->cz == 0)
+            {
+                sucessor(f, state, 'Z', ds);
+                total_explored++;
+            }    
+            if (state->cy < 2 && state->cNy == 0)
+            {
+                sucessor(f, state, 'y', ds);
+                total_explored++;
+            }
+            if (state->cNy < 1 && state->cy == 0)
+            {
+                sucessor(f, state, 'Y', ds);
+                total_explored++;
+            }
+            if (state->cx < 2 && state->cNx == 0)
+            {
+                sucessor(f, state, 'x', ds); //soma cx em 1
+                total_explored++;
+            }
+            if (state->cNx < 1 && state->cx == 0)
+            {
+                sucessor(f, state, 'X', ds);
+                total_explored++;
+            }
         }
         //nao preciso de moves--; em else aqui
     }

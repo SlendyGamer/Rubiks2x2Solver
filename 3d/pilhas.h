@@ -20,7 +20,6 @@ void imprime (Pilha* p)     IMPRIMA A PILHA
 int vaziaPilha(Pilha *p)	    VERIFICA SE A PILHA EST� VAZIA, RETORNA 1
 
 */
-void print_open(int cube[]);
 
 typedef struct pilha
 {
