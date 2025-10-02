@@ -25,7 +25,7 @@ void unrank_position(int rank, int *position);
 void unrank_orientation(int rank, int *orientation);
 void insert(int index, int value, int **table);
 int access(int index, int **table);
-int** load_table()
+int** load_table();
 
 
 int process_24array(int *in_array, int orientation_rank_ceil) {
