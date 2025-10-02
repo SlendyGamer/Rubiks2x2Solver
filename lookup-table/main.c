@@ -179,18 +179,16 @@ int process_24array(int *in_array, int orientation_rank_ceil) {
     // CORNER 5: 9
     // CORNER 6: 0
 
-    // Referencia 3: qual a orientacao de cada indice do vetor de 24 inteiros
+    // Referencia 3: da o orientacao de cada indice do array de 24 elementos. indice e a 'position' do sticker
 
     // referencia de orientacoes: serve para entender qual a orientacao de cada posicao de sticker (eixo x, y ou z) - apenas para os 7 corners
-    char sample_orientation[] = {
-        'z', 'z', 'z',
-        'z', 'z', 'z',
-        'z', 'z', 'x',
-        'x', 'x', 'x',
-        'x', 'x', 'x',
-        'x', 'y', 'y',
-        'y', 'y', 'y',
-        'y', 'y', 'y'
+    char orientation_reference[24] = {
+        'z', 'z', 'z', 'z',
+        'z', 'z', 'z', 'z',
+        'x', 'x', 'x', 'x',
+        'x', 'x', 'x', 'x',
+        'y', 'y', 'y', 'y',
+        'y', 'y', 'y', 'y'
     };
 
     // pega o vetor de 24 inteiros e separa em 7 corners (trios) - corners nao ordenadas, mas na ordem da position
@@ -213,13 +211,56 @@ int process_24array(int *in_array, int orientation_rank_ceil) {
     for(i = 0; i < CORNERS; i++) {
         for(j = 0; j < 3; j++) {
             switch(corner_mat[i][j]) {
-                case 12: temp_position[i] = 0; temp_orientation[i] = sample_orientation[i*j + j] - 'x'; break;
-                case 15: temp_position[i] = 1; temp_orientation[i] = sample_orientation[i*j + j] - 'x'; break;
-                case 18: temp_position[i] = 2; temp_orientation[i] = sample_orientation[i*j + j] - 'x'; break;
-                case 3: temp_position[i] = 3; temp_orientation[i] = sample_orientation[i*j + j] - 'x'; break;
-                case 6: temp_position[i] = 4; temp_orientation[i] = sample_orientation[i*j + j] - 'x'; break;
-                case 9: temp_position[i] = 5; temp_orientation[i] = sample_orientation[i*j + j] - 'x'; break;
-                case 0: temp_position[i] = 6; temp_orientation[i] = sample_orientation[i*j + j] - 'x'; break;
+                case 12:
+                    temp_position[i] = 0;
+                    for(int k = 0; k < 24; k++) {
+                        if(in_array[k] == corner_mat[i][j]) {
+                            temp_orientation[i] = orientation_reference[k] - 'x';
+                        }
+                    }
+                    break;
+                case 15: temp_position[i] = 1;
+                    for(int k = 0; k < 24; k++) {
+                        if(in_array[k] == corner_mat[i][j]) {
+                            temp_orientation[i] = orientation_reference[k] - 'x';
+                        }
+                    }
+                    break;
+                case 18: temp_position[i] = 2;
+                    for(int k = 0; k < 24; k++) {
+                        if(in_array[k] == corner_mat[i][j]) {
+                            temp_orientation[i] = orientation_reference[k] - 'x';
+                        }
+                    }
+                    break;
+                case 3: temp_position[i] = 3; 
+                    for(int k = 0; k < 24; k++) {
+                        if(in_array[k] == corner_mat[i][j]) {
+                            temp_orientation[i] = orientation_reference[k] - 'x';
+                        }
+                    }
+                    break;
+                case 6: temp_position[i] = 4; 
+                    for(int k = 0; k < 24; k++) {
+                        if(in_array[k] == corner_mat[i][j]) {
+                            temp_orientation[i] = orientation_reference[k] - 'x';
+                        }
+                    }
+                    break;
+                case 9: temp_position[i] = 5; 
+                    for(int k = 0; k < 24; k++) {
+                        if(in_array[k] == corner_mat[i][j]) {
+                            temp_orientation[i] = orientation_reference[k] - 'x';
+                        }
+                    }
+                    break;
+                case 0: temp_position[i] = 6; 
+                    for(int k = 0; k < 24; k++) {
+                        if(in_array[k] == corner_mat[i][j]) {
+                            temp_orientation[i] = orientation_reference[k] - 'x';
+                        }
+                    }
+                    break;
             }
         }
     }
