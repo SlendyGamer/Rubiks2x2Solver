@@ -25,7 +25,8 @@ typedef struct search_strategy
     void (*insereStruct)(void* dataStruct, No* state); //insere na estrutura
     No* (*retiraStruct)(void* dataStruct); //retira da estrutura
     int (*vaziaStruct)(void* dataStruct); //funcao checa se estrutura esta vazia
-    void (*preparePathStruct)(void* datastruct, Pilha* path); //prepara o path final para o openGl resolver
+    void (*preparePathStruct)(void* dataStruct, Pilha* path); //prepara o path final para o openGl resolver
+    void* (*liberaStruct)(void* dataStruct); //libera estrutura
 }strat;
 
 

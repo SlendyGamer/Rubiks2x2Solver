@@ -589,6 +589,8 @@ void sucessor(void* f, No* state, char dir, strat ds)
 
 int search(void* f, No* state, int solution[], Pilha *path, strat ds)
 {
+    int total_explored = 0;
+    int total_visited = 0;
     void* fFinal = ds.criaStruct();
     state->pai = NULL;
     state->cx = 0;
@@ -603,6 +605,7 @@ int search(void* f, No* state, int solution[], Pilha *path, strat ds)
     while(!ds.vaziaStruct(f))
     {
         state = ds.retiraStruct(f);
+        total_visited++;
         ds.insereStruct(fFinal, state);
 
         if(memcmp(state->pattern, solution, 24 * sizeof(int)) == 0)
@@ -612,6 +615,9 @@ int search(void* f, No* state, int solution[], Pilha *path, strat ds)
            print_open(state->pattern);
            ds.preparePathStruct(fFinal, path);
            imprimePilha(path);
+           printf("estados totais criados: %d\n", total_explored);
+           printf("estados totais visitados: %d\n", total_visited);
+           ds.liberaStruct(fFinal);
            //imprimeFila(fFinal);
            return 1;
         }
@@ -619,19 +625,35 @@ int search(void* f, No* state, int solution[], Pilha *path, strat ds)
         if (state->moves < 14)
         {
             if (state->cz < 2 && state->cNz == 0)
+            {    
                 sucessor(f, state, 'z', ds);
+                total_explored++;
+            }
             if (state->cNz < 1 && state->cz == 0)
+            {
                 sucessor(f, state, 'Z', ds);
-
+                total_explored++;
+            }    
             if (state->cy < 2 && state->cNy == 0)
+            {
                 sucessor(f, state, 'y', ds);
+                total_explored++;
+            }
             if (state->cNy < 1 && state->cy == 0)
+            {
                 sucessor(f, state, 'Y', ds);
-
+                total_explored++;
+            }
             if (state->cx < 2 && state->cNx == 0)
+            {
                 sucessor(f, state, 'x', ds); //soma cx em 1
+                total_explored++;
+            }
             if (state->cNx < 1 && state->cx == 0)
+            {
                 sucessor(f, state, 'X', ds);
+                total_explored++;
+            }
         }
         //nao preciso de moves--; em else aqui
     }

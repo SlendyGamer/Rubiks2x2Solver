@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <malloc.h>
 #include "no.h"
 #include "FILA.h"
 #include "pilhas.h"
@@ -16,8 +17,8 @@ void animateRotation(int value);
 //    int pattern[24]; // Array de 0 a 23 mapeando quads para cores
 //} No; // Não utilizada diretamente
 
-static const strat DFS = { (void* (*)(void))CriaPilha, (void (*)(void*, No*))push,       (No* (*)(void*))pop,        (int (*)(void*))vaziaPilha, (void (*)(void*, Pilha*))preparePathPilha};
-static const strat BFS = { (void* (*)(void))CriaFila,  (void (*)(void*, No*))InsereFila, (No* (*)(void*))RetiraFila, (int (*)(void*))VaziaFila,  (void (*)(void*, Pilha*))preparePathFila};
+static const strat DFS = { (void* (*)(void))CriaPilha, (void (*)(void*, No*))push,       (No* (*)(void*))pop,        (int (*)(void*))vaziaPilha, (void (*)(void*, Pilha*))preparePathPilha, (void* (*)(void*))libera};
+static const strat BFS = { (void* (*)(void))CriaFila,  (void (*)(void*, No*))InsereFila, (No* (*)(void*))RetiraFila, (int (*)(void*))VaziaFila,  (void (*)(void*, Pilha*))preparePathFila, (void* (*)(void*))liberaFila};
 
 Pilha* path = NULL;
 
@@ -680,6 +681,7 @@ void keyboard(unsigned char key, int x, int y) {
                 printf("sucesso\n");
             }
             libera(p);
+            malloc_trim(0);
         } else if (key == 'b' || key == 'B') {
             if (path) libera(path);
             No* state = (No*)malloc(sizeof(No));
@@ -691,6 +693,7 @@ void keyboard(unsigned char key, int x, int y) {
                 printf("sucesso\n");
             }
             liberaFila(f);
+            malloc_trim(0);
         } else if(key == 's' || key == 'S') {
             if(path != NULL && !vaziaPilha(path) && rotationAngle == 0.0f)
             {
