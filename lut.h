@@ -13,6 +13,7 @@
 #define BLOCK_SIZE 5040
 #define FILE_NAME "../lut_file"
 
+int get_cost(int* array, int **table);
 int rank_position(int *position);
 int rank_orientation(int *orientation);
 int factorial(int n);
@@ -25,86 +26,6 @@ void unrank_orientation(int rank, int *orientation);
 void insert(int index, int value, int **table);
 int access(int index, int **table);
 int** load_table()
-
-int main() {
-
-    int i;
-    int** table = create_table();
-    Fila *f_states = CriaFila();
-    int correct_state[24] = {
-        18, 17, 4, 1,        // Front face (4 quads)
-        12, 21, 9, 6,        // Back face
-        22, 20, 8, 5,        // Left face
-        15, 14, 0, 10,       // Right face
-        3, 2, 7, 11,         // Top face
-        23, 13, 19, 16       // Bottom face
-    };
-    No* state = malloc(sizeof(No));
-
-    memcpy(state->pattern, correct_state, 24 * sizeof(int));
-    state->pai = NULL;
-    state->cx = 0;
-    state->cy = 0;
-    state->cz = 0;
-    state->cNx = 0;
-    state->cNy = 0;
-    state->cNz = 0;
-    state->moves = 0;
-    state->rotation = '-';
-    state->pai = NULL;
-    state->prox = NULL;
-
-    InsereFila(f_states, state);
-
-    int index;
-    int orientation_rank_ceil = pow(3, CORNERS);
-    int conteiro = 0;
-
-    // loop para chamar para cada estado no bfs
-    while(!VaziaFila(f_states))
-    {
-        state = RetiraFila(f_states);
-        index = process_24array(state->pattern, orientation_rank_ceil);
-        
-        if(access(index, table) == -1) {
-            insert(index, state->moves, table);
-            printf("%d\n", conteiro);
-            conteiro++;
-
-            if (state->cz < 2 && state->cNz == 0)
-                sucessoraBFS(f_states, state, 'z');
-            if (state->cNz < 1 && state->cz == 0)
-                sucessoraBFS(f_states, state, 'Z');
-
-            if (state->cy < 2 && state->cNy == 0)
-                sucessoraBFS(f_states, state, 'y');
-            if (state->cNy < 1 && state->cy == 0)
-                sucessoraBFS(f_states, state, 'Y');
-
-            if (state->cx < 2 && state->cNx == 0)
-                sucessoraBFS(f_states, state, 'x');
-            if (state->cNx < 1 && state->cx == 0)
-                sucessoraBFS(f_states, state, 'X');
-        }
-    }
-
-    // for(i = 0; i < TOTAL_STATES / BLOCK_SIZE; i++) {
-    //     printf("----- %04d -----\n", i);
-    //     print_array(table[i], BLOCK_SIZE);
-    // }
-
-    FILE *f = fopen(FILE_NAME, "wb");
-    if (!f) {
-        perror("fopen");
-        exit(1);
-    }
-
-    for(i = 0; i < TOTAL_STATES / BLOCK_SIZE; i++) {
-        fwrite(table[i], sizeof(int), BLOCK_SIZE, f);
-    }
-
-    fclose(f);
-}
 
 
 int process_24array(int *in_array, int orientation_rank_ceil) {

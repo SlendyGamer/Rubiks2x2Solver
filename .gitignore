@@ -55,3 +55,7 @@ dkms.conf
 *.dwo
 
 /lookup-table/test
+
+test
+
+lut_file
