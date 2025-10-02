@@ -6,12 +6,12 @@ typedef struct pilha Pilha;
 typedef struct no
 {
     char pattern[24];
-    int cx;
-    int cNx;
-    int cy;
-    int cNy;
-    int cz;
-    int cNz;
+    char cx;
+    char cNx;
+    char cy;
+    char cNy;
+    char cz;
+    char cNz;
     int moves;
     char rotation;
     char status; //old
@@ -29,9 +29,4 @@ typedef struct search_strategy
     void* (*liberaStruct)(void* dataStruct); //libera estrutura
 }strat;
 
-
-/*farei isso na main:
-strat dfs = {void push, no* pop, void sucessora, int vaziaPilha }
-strat bfs = {void insereFila, no* retiraFila, void sucessoraBFS, int vaziaFila }
-*/
 #endif
